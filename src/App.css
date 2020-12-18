@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+
+.filmsList{
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.filmsList li{
+  list-style: none;
+  width: 25%;
+}
+.card{
+  width: 90%;
+  border: 1px solid #84a3e0;
+  margin: 20px auto ;
+}
+
+.imgCard{
+  height: 200px;
+  width: auto;
+}
