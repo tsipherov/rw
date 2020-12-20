@@ -233,7 +233,7 @@ export const moviesData = [
     poster_path: "/fptnZJbLzKUHeNlYrAynbyoL5YJ.jpg",
     original_language: "es",
     original_title: "Contratiempo",
-    backdrop_path: "/urrIaUxmLXYWodZx7KJPLLVFaKC.jpg",
+    backdrop_path: "/k0KEzkdLHtebX4Jhx7uXJqz34wQ.jpg",
     adult: false,
     overview:
       "'The Invisible Guest' turns on a young businessman who wakes up in a hotel room locked from the inside with the dead body of his lover next to him. He hires a prestigious lawyer, and over one night they work together to clarify what happened in a frenetic race against time.",

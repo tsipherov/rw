@@ -37,18 +37,22 @@
   }
 }
 
-.filmsList{
+ul{
+
+  list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.filmsList{
   flex-wrap: wrap;
 }
 
 .filmsList li{
-  list-style: none;
-  width: 25%;
+  width: 33%;
 }
 .card{
-  width: 90%;
+  width: 96%;
   border: 1px solid #84a3e0;
   margin: 20px auto ;
 }
@@ -56,4 +60,9 @@
 .imgCard{
   height: 200px;
   width: auto;
+}
+
+.btn-watch{
+  height: 31px;
+  line-height: 31px;
 }
