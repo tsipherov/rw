@@ -38,7 +38,7 @@ function Image(props) {
     }
   
     render() {
-      let { title, vote_average, overview, ...data } = this.state.movie;
+      let { title, vote_average, overview, release_date, ...data } = this.state.movie;
   
       return (
         <div className="card">
@@ -46,7 +46,10 @@ function Image(props) {
           <div className="card-body">
             <h5 className='card-title'>{title}</h5>
             <div className="d-flex justify-content-between">
-              <p className='card-text'>Rating: {vote_average}</p>
+              <div>
+                <p className='card-text'>Rating: {vote_average}</p>
+                <p className='card-text'>{release_date}</p>
+              </div>
               { this.props.handlerWillWatch? 
 
                 (<button

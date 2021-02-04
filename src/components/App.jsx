@@ -1,7 +1,8 @@
 import React from "react";
 import "../App.css";
-import { moviesData } from "../moviesData"
+// import { moviesData } from "../moviesData"
 import MovieItem from './MovieItem'
+import { API_URL, API_KEY_3} from '../api'
 
 class App extends React.Component {
 
@@ -9,9 +10,13 @@ class App extends React.Component {
     super()
 
     this.state = {
-      movies: moviesData,
+      movies: [],
       watchList: []
     }
+  }
+
+  componentDidMount() { 
+    fetch(`${API_URL}/discover/movie?api_key=${API_KEY_3}`).then((response) => response.json()).then(data => { this.setState({ movies: data.results } )})
   }
 
   handleDelete = (id)=>{
