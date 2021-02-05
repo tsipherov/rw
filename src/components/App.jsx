@@ -3,6 +3,7 @@ import "../App.css";
 // import { moviesData } from "../moviesData"
 import MovieItem from './MovieItem'
 import { API_URL, API_KEY_3} from '../api'
+import SortTabs from "./SortTabs";
 
 class App extends React.Component {
 
@@ -11,12 +12,13 @@ class App extends React.Component {
 
     this.state = {
       movies: [],
-      watchList: []
+      watchList: [],
+      sort_by: "vote_average.desc" 
     }
   }
 
   componentDidMount() { 
-    fetch(`${API_URL}/discover/movie?api_key=${API_KEY_3}`).then((response) => response.json()).then(data => { this.setState({ movies: data.results } )})
+    fetch(`${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${this.state.sort_by}`).then((response) => response.json()).then(data => { this.setState({ movies: data.results } )})
   }
 
   handleDelete = (id)=>{
@@ -30,8 +32,6 @@ class App extends React.Component {
     })
   }
   handlerWillWatchAdd = (movie) => { 
-
-
 
     this.setState((prevState) => {
       let newWatchList = [...prevState.watchList, movie]
@@ -54,11 +54,20 @@ class App extends React.Component {
       }
     })
   }
+
+  handlerSortTabs = value => { 
+    this.setState(
+      (prevState) => {return { sort_by: value } }
+    )
+  }
   
   render() {
     return (
       <div className="container">
-       <div className="row">
+        <div className="row">
+          <SortTabs sort_by={this.state.sort_by} handler={ this.handlerSortTabs }/>
+        </div>
+        <div className="row">
           <ul className="d-flex filmsList col-9">
             { this.state.movies.map((movie) => {
               return (

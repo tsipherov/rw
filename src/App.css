@@ -66,3 +66,7 @@ ul{
   height: 31px;
   line-height: 31px;
 }
+
+.nav-link{
+  cursor: pointer;
+}
