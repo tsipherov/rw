@@ -37,6 +37,7 @@
   }
 }
 
+
 ul{
 
   list-style: none;
@@ -44,21 +45,25 @@ ul{
   padding: 0;
 }
 
+ul.pagination{
+  cursor: pointer;
+}
+
 .filmsList{
   flex-wrap: wrap;
 }
 
-.filmsList li{
-  width: 33%;
+.filmsList>div{
+  width: 20%;
 }
 .card{
   width: 96%;
   border: 1px solid #84a3e0;
-  margin: 20px auto ;
+  margin: 10px auto ;
 }
 
 .imgCard{
-  height: 200px;
+  height: 180px;
   width: auto;
 }
 
@@ -69,4 +74,8 @@ ul{
 
 .nav-link{
   cursor: pointer;
+}
+
+.willWatchWrap{
+  height: 5rem;
 }
