@@ -11,4 +11,18 @@ export default class ApiService {
     );
     return result;
   };
+
+  getTest = async () => {
+    const result = await fetch(
+      `${API_URL}/genre/movie/list?api_key=${API_KEY_3}&language=uk-UA`
+    );
+    return result;
+  };
+
+  getMovieDetails = async (movie_id) => {
+    const result = await fetch(
+      `${API_URL}/movie/${movie_id}?api_key=${API_KEY_3}&language=uk-UA`
+    );
+    return result;
+  };
 }

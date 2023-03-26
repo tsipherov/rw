@@ -11,11 +11,15 @@ const MovieList = ({ sort_by, page }) => {
     apiService
       .getMovies(sort_by, page)
       .then((data) => data.json())
-      .then((data) => setMovies(data.results))
+      .then((data) => {
+        setMovies(data.results);
+        console.log("data >>> ", data);
+      })
       .catch((error) => setError(error));
     // eslint-disable-next-line
   }, [sort_by, page]);
 
+  if (error) return error;
   return movies.map((movie) => (
     <div className="align-self-stretch" key={movie.id}>
       <MovieItem

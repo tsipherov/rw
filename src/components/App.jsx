@@ -5,6 +5,7 @@ import Filter from "./Filter/Filter";
 import Pagination from "./Pagination/Pagination";
 import WillWatchCard from "./WillWatchCard/WillWatchCard";
 import MovieList from "./MovieList/MovieList";
+import ApiService from "../services/ApiService";
 
 class App extends React.Component {
   // constructor() {
@@ -20,9 +21,18 @@ class App extends React.Component {
   };
   // }
 
-  // componentDidMount() {
-  //   this.getMovies();
-  // }
+  service = new ApiService();
+
+  componentDidMount() {
+    this.service
+      .getMovieDetails(19995)
+      .then((res) => res.json())
+      .then((res) => console.log("res >>> ", res));
+    // this.service
+    //   .getTest()
+    //   .then((res) => res.json())
+    //   .then((res) => console.log("res >>> ", res));
+  }
 
   // componentDidUpdate(prevProps, prevState) {
   //   if (prevState.sort_by !== this.state.sort_by) this.getMovies();
