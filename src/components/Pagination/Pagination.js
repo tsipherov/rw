@@ -7,7 +7,6 @@ const Pagination = ({ handler, currentPage }) => {
       <ul
         className="pagination  justify-content-center"
         onClick={(e) => {
-          console.log(Number(e.target.dataset.value));
           if (e.target.dataset.value) handler(Number(e.target.dataset.value));
         }}
       >

@@ -1,12 +1,10 @@
 import React from "react";
-import { API_URL, API_KEY_3 } from "../api";
-import MovieItem from "./MovieItem";
-// import SortTabs from "./SortTabs";
 import "../App.css";
 import Navbar from "./Navbar/Navbar";
 import Filter from "./Filter/Filter";
 import Pagination from "./Pagination/Pagination";
 import WillWatchCard from "./WillWatchCard/WillWatchCard";
+import MovieList from "./MovieList/MovieList";
 
 class App extends React.Component {
   // constructor() {
@@ -15,30 +13,21 @@ class App extends React.Component {
   state = {
     movies: [],
     watchList: [],
-    sort_by: "popularity.desc",
+    filters: {
+      sort_by: "popularity.desc",
+    },
     page: 1,
   };
   // }
 
-  componentDidMount() {
-    this.getMovies();
-  }
+  // componentDidMount() {
+  //   this.getMovies();
+  // }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.sort_by !== this.state.sort_by) this.getMovies();
-    if (prevState.page !== this.state.page) this.getMovies();
-  }
-
-  getMovies() {
-    fetch(
-      `${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${this.state.sort_by}&language=uk-UA&page=${this.state.page}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        this.setState({ movies: data.results });
-      });
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.sort_by !== this.state.sort_by) this.getMovies();
+  //   if (prevState.page !== this.state.page) this.getMovies();
+  // }
 
   handlerPagination = (page) => {
     this.setState({ page });
@@ -76,44 +65,37 @@ class App extends React.Component {
   };
 
   handlerSortTabs = (value) => {
-    this.setState((prevState) => {
-      return { sort_by: value, page: 1 };
-    });
+    this.setState((state) => ({
+      ...state,
+      page: 1,
+      filters: { sort_by: value },
+    }));
   };
 
   render() {
-    const movieList = this.state.movies.map((movie) => {
-      return (
-        <div className="align-self-stretch" key={movie.id}>
-          <MovieItem
-            data={movie}
-            handle={this.handleDelete}
-            handlerWillWatch={this.handlerWillWatchAdd}
-            handlerRemoveWillWatch={this.handlerWillWatchRemove}
-          />
-        </div>
-      );
-    });
-
+    const {
+      page,
+      filters: { sort_by },
+    } = this.state;
     return (
       <div className="container-fluid">
         <Navbar />
         {/* <div className="row my-3">
-          <SortTabs
-            sort_by={this.state.sort_by}
-            handler={this.handlerSortTabs}
-          />
-        </div> */}
+      <SortTabs
+      sort_by={this.state.sort_by}
+      handler={this.handlerSortTabs}
+      />
+    </div> */}
         <div className="row my-3">
           <div className="d-flex flex-column col-2">
             <h3>Sort Results By</h3>
             <Filter
-              sort_by={this.state.sort_by}
+              sort_by={this.state.filters.sort_by}
               handler={this.handlerSortTabs}
             />
           </div>
           <div className="d-flex filmsList col-8 mb-5">
-            {movieList}
+            <MovieList sort_by={sort_by} page={page} />
             <div className="d-flex row w-100 py-5">
               <Pagination
                 handler={this.handlerPagination}
