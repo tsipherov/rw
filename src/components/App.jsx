@@ -6,20 +6,19 @@ import Pagination from "./Pagination/Pagination";
 import WillWatchCard from "./WillWatchCard/WillWatchCard";
 import MovieList from "./MovieList/MovieList";
 import ApiService from "../services/ApiService";
+import Select from "./UI/Select/Select";
 
 class App extends React.Component {
-  // constructor() {
-  //   super();
-
   state = {
-    movies: [],
+    genreList: [],
     watchList: [],
     filters: {
       sort_by: "popularity.desc",
+      with_genres: "all",
+      primary_release_year: "all",
     },
     page: 1,
   };
-  // }
 
   service = new ApiService();
 
@@ -27,17 +26,26 @@ class App extends React.Component {
     this.service
       .getMovieDetails(19995)
       .then((res) => res.json())
-      .then((res) => console.log("res >>> ", res));
-    // this.service
-    //   .getTest()
-    //   .then((res) => res.json())
-    //   .then((res) => console.log("res >>> ", res));
+      .then((res) => console.log("getMovieDetails >>> ", res));
+    this.service
+      .getGenre()
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("getGenre >>> ", res);
+        this.setState({ genreList: res.genres });
+      });
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevState.sort_by !== this.state.sort_by) this.getMovies();
-  //   if (prevState.page !== this.state.page) this.getMovies();
-  // }
+  createYearSelect = (years) => {
+    const yearsArr = new Array(years);
+    const currentYear = new Date().getFullYear();
+    for (let i = 0; i < years; i++) {
+      yearsArr[i] = { id: currentYear - i, name: currentYear - i };
+    }
+    return yearsArr;
+
+    // console.log("yearsArr >>> ", yearsArr);
+  };
 
   handlerPagination = (page) => {
     this.setState({ page });
@@ -78,7 +86,23 @@ class App extends React.Component {
     this.setState((state) => ({
       ...state,
       page: 1,
-      filters: { sort_by: value },
+      filters: { ...state.filters, sort_by: value },
+    }));
+  };
+
+  handlerGenres = (value) => {
+    this.setState((state) => ({
+      ...state,
+      page: 1,
+      filters: { ...state.filters, with_genres: value },
+    }));
+  };
+
+  handlerReleaseYear = (value) => {
+    this.setState((state) => ({
+      ...state,
+      page: 1,
+      filters: { ...state.filters, primary_release_year: value },
     }));
   };
 
@@ -90,22 +114,36 @@ class App extends React.Component {
     return (
       <div className="container-fluid">
         <Navbar />
-        {/* <div className="row my-3">
-      <SortTabs
-      sort_by={this.state.sort_by}
-      handler={this.handlerSortTabs}
-      />
-    </div> */}
         <div className="row my-3">
           <div className="d-flex flex-column col-2">
-            <h3>Sort Results By</h3>
+            <h5>Sort Results By</h5>
             <Filter
               sort_by={this.state.filters.sort_by}
               handler={this.handlerSortTabs}
             />
+            <h5>Genres</h5>
+            {
+              <Select
+                data={this.state.genreList}
+                handler={this.handlerGenres}
+                defaultOption={{ id: "all", name: "All genres" }}
+              />
+            }
+            <h5>Release year</h5>
+            {
+              <Select
+                data={this.createYearSelect(100)}
+                handler={this.handlerReleaseYear}
+                defaultOption={{ id: "all", name: "All years" }}
+              />
+            }
           </div>
           <div className="d-flex filmsList col-8 mb-5">
-            <MovieList sort_by={sort_by} page={page} />
+            <MovieList
+              filters={this.state.filters}
+              sort_by={sort_by}
+              page={page}
+            />
             <div className="d-flex row w-100 py-5">
               <Pagination
                 handler={this.handlerPagination}

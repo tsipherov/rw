@@ -5,14 +5,19 @@ const API_KEY_3 = process.env.REACT_APP_API_KEY_3;
 // const API_KEY_4 = process.env.REACT_APP_API_KEY_4;
 
 export default class ApiService {
-  getMovies = async (sort_by, page) => {
+  getMovies = async (filters, page) => {
+    const searchParams = Object.keys(filters)
+      .map((filter) => {
+        if (filters[filter] != "all") return `&${filter}=${filters[filter]}`;
+      })
+      .join("");
     const result = await fetch(
-      `${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${sort_by}&language=uk-UA&page=${page}`
+      `${API_URL}/discover/movie?api_key=${API_KEY_3}${searchParams}&language=uk-UA&page=${page}`
     );
     return result;
   };
 
-  getTest = async () => {
+  getGenre = async () => {
     const result = await fetch(
       `${API_URL}/genre/movie/list?api_key=${API_KEY_3}&language=uk-UA`
     );
