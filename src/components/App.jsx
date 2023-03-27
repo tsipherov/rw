@@ -1,12 +1,11 @@
 import React from "react";
 import "../App.css";
 import Navbar from "./Navbar/Navbar";
-import Filter from "./Filter/Filter";
 import Pagination from "./Pagination/Pagination";
-import WillWatchCard from "./WillWatchCard/WillWatchCard";
+// import WillWatchCard from "./WillWatchCard/WillWatchCard";
 import MovieList from "./MovieList/MovieList";
 import ApiService from "../services/ApiService";
-import Select from "./UI/Select/Select";
+import Filters from "./Filters/Filters";
 
 class App extends React.Component {
   state = {
@@ -24,9 +23,9 @@ class App extends React.Component {
 
   componentDidMount() {
     this.service
-      .getMovieDetails(19995)
+      .getAuthentication()
       .then((res) => res.json())
-      .then((res) => console.log("getMovieDetails >>> ", res));
+      .then((res) => console.log("getAuthentication >>> ", res));
     this.service
       .getGenre()
       .then((res) => res.json())
@@ -43,8 +42,6 @@ class App extends React.Component {
       yearsArr[i] = { id: currentYear - i, name: currentYear - i };
     }
     return yearsArr;
-
-    // console.log("yearsArr >>> ", yearsArr);
   };
 
   handlerPagination = (page) => {
@@ -112,56 +109,42 @@ class App extends React.Component {
       filters: { sort_by },
     } = this.state;
     return (
-      <div className="container-fluid">
+      <div>
         <Navbar />
-        <div className="row my-3">
-          <div className="d-flex flex-column col-2">
-            <h5>Sort Results By</h5>
-            <Filter
-              sort_by={this.state.filters.sort_by}
-              handler={this.handlerSortTabs}
+        <div className="container-xxl">
+          <div className="row my-3 px-3">
+            <Filters
+              genreList={this.state.genreList}
+              createYearSelect={this.createYearSelect}
+              handlerSortTabs={this.handlerSortTabs}
+              handlerGenres={this.handlerGenres}
+              handlerReleaseYear={this.handlerReleaseYear}
             />
-            <h5>Genres</h5>
-            {
-              <Select
-                data={this.state.genreList}
-                handler={this.handlerGenres}
-                defaultOption={{ id: "all", name: "All genres" }}
+            <div className="d-flex filmsList col-8 mb-5">
+              <MovieList
+                filters={this.state.filters}
+                sort_by={sort_by}
+                page={page}
               />
-            }
-            <h5>Release year</h5>
-            {
-              <Select
-                data={this.createYearSelect(100)}
-                handler={this.handlerReleaseYear}
-                defaultOption={{ id: "all", name: "All years" }}
-              />
-            }
-          </div>
-          <div className="d-flex filmsList col-8 mb-5">
-            <MovieList
-              filters={this.state.filters}
-              sort_by={sort_by}
-              page={page}
-            />
-            <div className="d-flex row w-100 py-5">
-              <Pagination
-                handler={this.handlerPagination}
-                currentPage={this.state.page}
-              />
+              <div className="d-flex row w-100 py-5">
+                <Pagination
+                  handler={this.handlerPagination}
+                  currentPage={this.state.page}
+                />
+              </div>
             </div>
-          </div>
-          <div className="d-flex flex-column col-2">
+            {/* <div className="d-flex flex-column col-2">
             <p>Will watch: {this.state.watchList.length}</p>
             <div className="d-flex flex-column">
-              {this.state.watchList.map((movie) => {
-                return (
-                  <div className="col" key={movie.id}>
-                    <WillWatchCard data={movie} />
+            {this.state.watchList.map((movie) => {
+              return (
+                <div className="col" key={movie.id}>
+                <WillWatchCard data={movie} />
                   </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+                </div>
+              </div> */}
           </div>
         </div>
       </div>

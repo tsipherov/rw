@@ -2,8 +2,9 @@ import React from "react";
 
 const Navbar = () => {
   return (
+    // <div className="container-xxl">
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div className="container-fluid">
+      <div className="container-xxl">
         <a className="navbar-brand" href="!#">
           Navbar
         </a>
@@ -82,6 +83,7 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
+    // </div>
   );
 };
 
