@@ -1,11 +1,11 @@
 import React from "react";
 import "../App.css";
 import Navbar from "./Navbar/Navbar";
-import Pagination from "./Pagination/Pagination";
+// import Pagination from "./Pagination/Pagination";
 // import WillWatchCard from "./WillWatchCard/WillWatchCard";
-import MovieList from "./MovieList/MovieList";
-import ApiService from "../services/ApiService";
+import MoviesContainer from "./MovieList/MoviesContainer";
 import Filters from "./Filters/Filters";
+import ApiService from "../services/apiService";
 
 class App extends React.Component {
   state = {
@@ -104,10 +104,7 @@ class App extends React.Component {
   };
 
   render() {
-    const {
-      page,
-      filters: { sort_by },
-    } = this.state;
+    const { page } = this.state;
     return (
       <div>
         <Navbar />
@@ -120,19 +117,13 @@ class App extends React.Component {
               handlerGenres={this.handlerGenres}
               handlerReleaseYear={this.handlerReleaseYear}
             />
-            <div className="d-flex filmsList col-8 mb-5">
-              <MovieList
-                filters={this.state.filters}
-                sort_by={sort_by}
-                page={page}
-              />
-              <div className="d-flex row w-100 py-5">
-                <Pagination
-                  handler={this.handlerPagination}
-                  currentPage={this.state.page}
-                />
-              </div>
-            </div>
+
+            <MoviesContainer
+              handlerPagination={this.handlerPagination}
+              filters={this.state.filters}
+              page={page}
+            />
+
             {/* <div className="d-flex flex-column col-2">
             <p>Will watch: {this.state.watchList.length}</p>
             <div className="d-flex flex-column">

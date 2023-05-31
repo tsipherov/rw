@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import ApiService from "../../services/ApiService";
-import MovieItem from "../MovieItem/MovieItem";
+import ApiService from "../../services/apiService";
+import MoviesList from "./MoviesList";
 
-const MovieList = ({ filters, sort_by, page }) => {
+const MoviesContainer = ({ filters, page, handlerPagination }) => {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
   const apiService = new ApiService();
@@ -20,16 +20,13 @@ const MovieList = ({ filters, sort_by, page }) => {
   }, [filters, page]);
 
   if (error) return error;
-  return movies.map((movie) => (
-    <div className="align-self-stretch" key={movie.id}>
-      <MovieItem
-        data={movie}
-        // handle={this.handleDelete}
-        // handlerWillWatch={this.handlerWillWatchAdd}
-        // handlerRemoveWillWatch={this.handlerWillWatchRemove}
-      />
-    </div>
-  ));
+  return (
+    <MoviesList
+      handlerPagination={handlerPagination}
+      page={page}
+      movies={movies}
+    />
+  );
 };
 
-export default MovieList;
+export default MoviesContainer;

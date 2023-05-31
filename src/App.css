@@ -2,17 +2,6 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -28,54 +17,48 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-ul{
-
+ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-ul.pagination{
+ul.pagination {
   cursor: pointer;
 }
 
-.filmsList{
-  flex-wrap: wrap;
+.card {
+  height: 100%;
 }
 
-.filmsList>div{
-  width: 25%;
-}
-.card{
-  width: 96%;
-  border: 1px solid #84a3e0;
-  margin: 10px auto ;
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.imgCard{
+.card-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.imgCard {
   height: 180px;
   width: auto;
 }
 
-.btn-watch{
+.btn-watch {
   height: 31px;
   line-height: 31px;
 }
 
-.nav-link{
+.nav-link {
   cursor: pointer;
 }
 
-.willWatchWrap{
+.willWatchWrap {
   height: 5rem;
 }
