@@ -1,0 +1,28 @@
+.card {
+  height: 100%;
+  box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.imgCard {
+  height: 180px;
+  width: auto;
+}
+
+.btn-watch {
+  height: 31px;
+  line-height: 31px;
+}
