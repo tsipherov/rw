@@ -12,6 +12,14 @@ export default class ApiService {
     return result;
   };
 
+  validateLogin = async (options) => {
+    const result = await fetch(
+      `${API_URL}/authentication/token/validate_with_login?api_key=${API_KEY_3}`,
+      options
+    );
+    return result;
+  };
+
   getMovies = async (filters, page) => {
     const searchParams = Object.keys(filters)
       .map((filter) => {

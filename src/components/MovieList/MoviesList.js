@@ -6,7 +6,7 @@ import "./MoviesList.css";
 
 const MoviesList = ({ movies, page, handlerPagination }) => {
   return (
-    <div className="d-flex filmsList col-8 mb-5">
+    <div className="d-flex filmsList col-10 mb-5">
       {movies.map((movie) => (
         <div className="film-card" key={movie.id}>
           <MovieItem

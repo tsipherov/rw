@@ -10,6 +10,8 @@ import "./HomePage.css";
 import ApiService from "../../services/apiService";
 import Filters from "../../components/Filters/Filters";
 
+const API_KEY_3 = process.env.REACT_APP_API_KEY_3;
+
 class HomePage extends React.Component {
   state = {
     genreList: [],
@@ -28,7 +30,25 @@ class HomePage extends React.Component {
     this.service
       .getAuthentication()
       .then((res) => res.json())
-      .then((res) => console.log("getAuthentication >>> ", res));
+      .then((res) => {
+        console.log("getToken >>> ", res.request_token);
+        const options = {
+          method: "POST",
+          // mode: "cors",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            username: "tsipherov",
+            password: "ih5jA5qCykHM.x8",
+            request_token: res.request_token,
+          }),
+        };
+        this.service
+          .validateLogin(options)
+          .then((res) => res.json())
+          .then((res) => console.log("getAuthentication >>> ", res));
+      });
     this.service
       .getGenre()
       .then((res) => res.json())
