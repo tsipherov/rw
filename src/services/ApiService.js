@@ -15,7 +15,7 @@ export default class ApiService {
   getMovies = async (filters, page) => {
     const searchParams = Object.keys(filters)
       .map((filter) => {
-        if (filters[filter] != "all") return `&${filter}=${filters[filter]}`;
+        if (filters[filter] !== "all") return `&${filter}=${filters[filter]}`;
       })
       .join("");
     const result = await fetch(

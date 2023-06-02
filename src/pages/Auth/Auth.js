@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useFetch } from "../../hooks/useFetch";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
-import { UserContext } from "../../contexts/userContext";
+// import { useFetch } from "../../hooks/useFetch";
+// import { useLocalStorage } from "../../hooks/useLocalStorage";
+// import { UserContext } from "../../contexts/userContext";
 import BackendErrorMessage from "../../components/BackendErrorMessage/BackendErrorMessage";
 
 const Auth = () => {
@@ -10,8 +10,8 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [isSaccessSubmit, setIsSaccessSubmit] = useState(false);
-  const [currentUser, setCurrentUser] = useContext(UserContext);
-  console.log("currentUser: ", currentUser);
+  // const [currentUser, setCurrentUser] = useContext(UserContext);
+  // console.log("currentUser: ", currentUser);
 
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -22,38 +22,39 @@ const Auth = () => {
   const descriptionText = isLogin ? "Need an account?" : "Have an account?";
   const apiUrl = isLogin ? "/users/login" : "/users";
 
-  const [{ isLoading, response, error }, createFetchOptions] = useFetch(apiUrl);
-  const [token, setToken] = useLocalStorage("token");
+  // const [{ isLoading, response, error }, createFetchOptions] = useFetch(apiUrl);
+  // const [token, setToken] = useLocalStorage("token");
 
   useEffect(() => {
-    if (!response) return;
-    setToken(response.user.token);
+    // if (!response) return;
+    // setToken(response.user.token);
     setIsSaccessSubmit(true);
-    setCurrentUser((state) => {
-      return {
-        ...state,
-        isLoading: false,
-        isLogedIn: true,
-        currentUser: response,
-      };
-    });
-  }, [response, setToken, error]);
+    // setCurrentUser((state) => {
+    //   return {
+    //     ...state,
+    //     isLoading: false,
+    //     isLogedIn: true,
+    //     currentUser: response,
+    //   };
+    // });
+  }, []);
+  // }, [response, setToken, error]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const user = isLogin ? { email, password } : { username, email, password };
+    // const user = isLogin ? { email, password } : { username, email, password };
 
-    createFetchOptions({
-      method: "POST",
-      data: {
-        user,
-      },
-    });
+    // createFetchOptions({
+    //   method: "POST",
+    //   data: {
+    //     user,
+    //   },
+    // });
   };
 
-  if (isSaccessSubmit) {
-    return navigate("/");
-  }
+  // if (isSaccessSubmit) {
+  //   return navigate("/");
+  // }
 
   return (
     <div className="auth-page">
@@ -64,8 +65,8 @@ const Auth = () => {
             <p className="text-xs-center">
               <Link to={descriptionLink}>{descriptionText}</Link>
             </p>
-            <form onSubmit={submitHandler}>
-              {error && <BackendErrorMessage backendError={error.errors} />}
+            {/* <form onSubmit={submitHandler}>
+               {error && <BackendErrorMessage backendError={error.errors} />}
               <fieldset>
                 {!isLogin && (
                   <fieldset className="form-group">
@@ -105,12 +106,12 @@ const Auth = () => {
                 <button
                   className="btn btn-lg btn-primary pull-xs-right"
                   type="submit"
-                  disabled={isLoading}
+                  // disabled={isLoading}
                 >
                   {pageTitle}
                 </button>
               </fieldset>
-            </form>
+            </form> */}
           </div>
         </div>
       </div>

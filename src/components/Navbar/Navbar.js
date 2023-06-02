@@ -1,13 +1,14 @@
 import React from "react";
+import "./Navbar.css";
+import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    // <div className="container-xxl">
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-xxl">
-        <a className="navbar-brand" href="!#">
-          Navbar
-        </a>
+        <Link to="/" className="logo">
+          <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" />
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -22,9 +23,9 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#!">
+              <NavLink to="/" className="nav-link">
                 Home
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="!#">
@@ -32,9 +33,9 @@ const Navbar = () => {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#!">
+              <NavLink to="/login" className="nav-link">
                 Login
-              </a>
+              </NavLink>
             </li>
           </ul>
           <form className="d-flex">
@@ -51,7 +52,6 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
-    // </div>
   );
 };
 
