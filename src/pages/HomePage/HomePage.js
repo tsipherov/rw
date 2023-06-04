@@ -27,28 +27,28 @@ class HomePage extends React.Component {
   service = new ApiService();
 
   componentDidMount() {
-    this.service
-      .getAuthentication()
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("getToken >>> ", res.request_token);
-        const options = {
-          method: "POST",
-          // mode: "cors",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            username: "tsipherov",
-            password: "ih5jA5qCykHM.x8",
-            request_token: res.request_token,
-          }),
-        };
-        this.service
-          .validateLogin(options)
-          .then((res) => res.json())
-          .then((res) => console.log("getAuthentication >>> ", res));
-      });
+    // this.service
+    //   .getAuthentication()
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     console.log("getToken >>> ", res.request_token);
+    //     const options = {
+    //       method: "POST",
+    //       // mode: "cors",
+    //       headers: {
+    //         "Content-type": "application/json",
+    //       },
+    //       body: JSON.stringify({
+    //         username: "tsipherov",
+    //         password: "ih5jA5qCykHM.x8",
+    //         request_token: res.request_token,
+    //       }),
+    //     };
+    //     this.service
+    //       .validateLogin(options)
+    //       .then((res) => res.json())
+    //       .then((res) => console.log("getAuthentication >>> ", res));
+    //   });
     this.service
       .getGenre()
       .then((res) => res.json())

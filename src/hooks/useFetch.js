@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-import { useLocalStorage } from "./useLocalStorage";
+// import { useLocalStorage } from "./useLocalStorage";
+import ApiService from "../services/apiService";
 
 export const useFetch = (url) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -8,31 +9,41 @@ export const useFetch = (url) => {
   const [error, setError] = useState(null);
   const [options, setOptions] = useState({});
 
-  const baseUrl = "https://conduit.productionready.io/api";
+  console.log("url >>> ", url);
 
-  const [userToken] = useLocalStorage("token");
+  const service = new ApiService();
+
+  // const baseUrl = "https://conduit.productionready.io/api";
+
+  // const [userToken] = useLocalStorage("token");
+
   const createFetchOptions = useCallback(
     (options = {}) => {
       const requestOptions = {
         ...options,
-        headers: {
-          authorization: userToken ? `Token ${userToken}` : "",
-        },
+        // headers: {
+        //   authorization: userToken ? `Token ${userToken}` : "",
+        // },
       };
       // console.log("requestOptions: ", requestOptions);
       setOptions(requestOptions);
       setIsLoading(true);
     },
-    [userToken]
+    []
+    // [userToken]
   );
 
   useEffect(() => {
-    if (!isLoading) return;
+    if (isLoading) return;
+    // if (!isLoading) return;
     // console.log("options: ", options);
-    axios(baseUrl + url, options)
+    // axios(baseUrl + url, options)
+    service
+      .getAuthentication()
+      .then((res) => res.json())
       .then((res) => {
-        // console.log("axios response >>> ", res.data);
-        setResponse(res.data);
+        console.log("axios response >>> ", res);
+        setResponse(res);
         setIsLoading(false);
       })
       .catch((err) => {
