@@ -1,57 +1,44 @@
-import axios from "axios";
+// import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 // import { useLocalStorage } from "./useLocalStorage";
 import ApiService from "../services/apiService";
 
-export const useFetch = (url) => {
+export const useFetch = (serviceMethod) => {
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
   const [options, setOptions] = useState({});
+  const [service, setService] = useState(serviceMethod);
 
-  console.log("url >>> ", url);
+  const apiServices = new ApiService();
 
-  const service = new ApiService();
-
-  // const baseUrl = "https://conduit.productionready.io/api";
-
-  // const [userToken] = useLocalStorage("token");
-
-  const createFetchOptions = useCallback(
-    (options = {}) => {
-      const requestOptions = {
-        ...options,
-        // headers: {
-        //   authorization: userToken ? `Token ${userToken}` : "",
-        // },
-      };
-      // console.log("requestOptions: ", requestOptions);
-      setOptions(requestOptions);
-      setIsLoading(true);
-    },
-    []
-    // [userToken]
-  );
+  const createFetchOptions = useCallback((serviceMethod, options = {}) => {
+    const requestOptions = {
+      ...options,
+    };
+    console.log("requestOptions: ", requestOptions);
+    if (serviceMethod) setService(serviceMethod);
+    setOptions(requestOptions);
+    setIsLoading(true);
+  }, []);
 
   useEffect(() => {
-    if (isLoading) return;
-    // if (!isLoading) return;
-    // console.log("options: ", options);
-    // axios(baseUrl + url, options)
-    service
-      .getAuthentication()
-      .then((res) => res.json())
+    if (!isLoading) return;
+    console.log("method >>> ", service);
+    apiServices[service](options)
+      // .then((res) => res.json())
       .then((res) => {
-        console.log("axios response >>> ", res);
+        console.log(">>>>>    сработал запрос    >>> ");
         setResponse(res);
         setIsLoading(false);
       })
       .catch((err) => {
-        // console.log("err: ", err);
-        setError(err.response.data);
+        console.log("err: ", err.message);
+        setError(err);
         setIsLoading(false);
       });
-  }, [isLoading, options, url]);
+    // eslint-disable-next-line
+  }, [isLoading, options, service]);
 
   return [{ isLoading, response, error }, createFetchOptions];
 };

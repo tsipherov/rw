@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
-// import { UserContext } from "../../contexts/userContext";
 import BackendErrorMessage from "../../components/BackendErrorMessage/BackendErrorMessage";
-import "./main.css";
 import { useLocalStorage } from "../../hooks/useLocalStogage";
+import "./main.css";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -12,51 +11,68 @@ const Auth = () => {
   const [username, setUsername] = useState("");
   const [isSaccessSubmit, setIsSaccessSubmit] = useState(false);
   // const [currentUser, setCurrentUser] = useContext(UserContext);
-  // console.log("currentUser: ", currentUser);
 
   const { pathname } = useLocation();
-  console.log("pathname >>> ", pathname);
   const navigate = useNavigate();
 
   const isLogin = pathname === "/login";
   const pageTitle = isLogin ? "Sign In" : "Sign Up";
   const descriptionLink = isLogin ? "/register" : "/login";
   const descriptionText = isLogin ? "Need an account?" : "Have an account?";
-  const apiUrl = isLogin ? "/users/login" : "/users";
-
-  const [{ isLoading, response, error }, createFetchOptions] = useFetch(apiUrl);
   const [token, setToken] = useLocalStorage("token");
+  const [sessionId, setSessionId] = useLocalStorage("session_id");
+
+  const [{ isLoading, response, error }, createFetchOptions] =
+    useFetch("getAuthentication");
 
   useEffect(() => {
-    if (!response) return;
-    console.log("response >>> ", response);
-    setToken(response.request_token);
-    setIsSaccessSubmit(true);
-    // setCurrentUser((state) => {
-    //   return {
-    //     ...state,
-    //     isLoading: false,
-    //     isLogedIn: true,
-    //     currentUser: response,
-    //   };
-    // });
-  }, [response, setToken, error]);
+    // console.log("useEff err>> ", error);
+    // console.log("useEff response>> ", response);
+    if (!isLoading && !response && !error) createFetchOptions();
+    if (response?.request_token) {
+      setToken(response.request_token);
+    }
+    if (!error && response?.validateLogin) {
+      createFetchOptions("createSession", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          request_token: token,
+        }),
+      });
+    }
+    if (response?.session_id) {
+      setSessionId(response.session_id);
+      // console.log("session_id >>> ", response.session_id);
+    }
+    if (sessionId) navigate("/");
+    // eslint-disable-next-line
+  }, [response, error, isLoading]);
 
   const submitHandler = (e) => {
     e.preventDefault();
+
     // const user = isLogin ? { email, password } : { username, email, password };
 
-    // createFetchOptions({
-    //   method: "POST",
-    //   data: {
-    //     user,
-    //   },
-    // });
+    createFetchOptions("validateLogin", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        username: "tsipherov",
+        password: "ih5jA5qCykHM.x8",
+        request_token: token,
+      }),
+    });
   };
 
-  // if (isSaccessSubmit) {
-  //   return navigate("/");
-  // }
+  if (isSaccessSubmit) {
+  }
 
   return (
     <div className="auth-page">
@@ -68,31 +84,32 @@ const Auth = () => {
               <Link to={descriptionLink}>{descriptionText}</Link>
             </p>
             <form onSubmit={submitHandler}>
-              {error && <BackendErrorMessage backendError={error.errors} />}
+              {error && <BackendErrorMessage backendError={error} />}
               <fieldset>
-                {!isLogin && (
-                  <fieldset className="form-group">
-                    <input
-                      type="text"
-                      className="form-control form-control-lg"
-                      placeholder="Your Name"
-                      value={username}
-                      onChange={(e) => {
-                        setUsername(e.target.value);
-                      }}
-                    />
-                  </fieldset>
-                )}
                 <fieldset className="form-group">
                   <input
-                    type="email"
+                    type="text"
                     className="form-control form-control-lg"
-                    placeholder="Email"
-                    value={email}
+                    placeholder="Your Name"
+                    value={username}
                     onChange={(e) => {
-                      setEmail(e.target.value);
+                      setUsername(e.target.value);
                     }}
                   />
+                </fieldset>
+
+                <fieldset className="form-group">
+                  {!isLogin && (
+                    <input
+                      type="email"
+                      className="form-control form-control-lg"
+                      placeholder="Email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                      }}
+                    />
+                  )}
                 </fieldset>
                 <fieldset className="form-group">
                   <input

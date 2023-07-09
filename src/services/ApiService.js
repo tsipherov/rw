@@ -6,17 +6,41 @@ const API_KEY_3 = process.env.REACT_APP_API_KEY_3;
 
 export default class ApiService {
   getAuthentication = async () => {
-    const result = await fetch(
+    const response = await fetch(
       `${API_URL}/authentication/token/new?api_key=${API_KEY_3}&language=uk-UA`
     );
-    return result;
+    if (!response.ok)
+      throw new Error(
+        `Failed to get token. Response status: ${response.status}`
+      );
+    const data = await response.json();
+    return data;
   };
 
   validateLogin = async (options) => {
-    const result = await fetch(
+    const response = await fetch(
       `${API_URL}/authentication/token/validate_with_login?api_key=${API_KEY_3}`,
       options
     );
+    if (!response.ok)
+      throw new Error(
+        `Failed to validate login. Response status: ${response.status}`
+      );
+    const data = await response.json();
+    const result = { validateLogin: data.success };
+    return result;
+  };
+
+  createSession = async (options) => {
+    const response = await fetch(
+      `${API_URL}/authentication/session/new?api_key=${API_KEY_3}`,
+      options
+    );
+    if (!response.ok)
+      throw new Error(
+        `Failed to create session. Response status: ${response.status}`
+      );
+    const result = await response.json();
     return result;
   };
 
