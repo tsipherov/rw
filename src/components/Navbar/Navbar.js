@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Navbar.css";
 import { Link, NavLink } from "react-router-dom";
+import { UserContext } from "../../contexts/userContext";
 
 const Navbar = () => {
+  const [currentUser, setCurrentUser] = useContext(UserContext);
+  console.log("currentUser >>>> ", currentUser);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-xxl">
@@ -41,6 +44,10 @@ const Navbar = () => {
               <NavLink to="/login" className="nav-link">
                 Login
               </NavLink>
+            </li>
+            <li className="nav-item">
+              <span>{currentUser.currentUser?.username}</span>
+              <img src="https://api.themoviedb.org/3/account/18546514//OdBNk07pRFVNpOyF6a1uHzLBMA.jpg" />
             </li>
           </ul>
           <form className="d-flex">

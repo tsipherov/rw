@@ -5,20 +5,23 @@ import HomePage from "./pages/HomePage/HomePage";
 import Auth from "./pages/Auth/Auth";
 import FavoritesPage from "./pages/FavoritesPage/FavoritesPage";
 import WatchPage from "./pages/WatchPage/WatchPage";
+import { UserProvider } from "./contexts/userContext";
 import "./App.css";
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="login" element={<Auth />} />
-        <Route path="register" element={<Auth />} />
-        <Route path="favorites" element={<FavoritesPage />} />
-        <Route path="watch" element={<WatchPage />} />
-      </Routes>
-    </BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="login" element={<Auth />} />
+          <Route path="register" element={<Auth />} />
+          <Route path="favorites" element={<FavoritesPage />} />
+          <Route path="watch" element={<WatchPage />} />
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
   );
 };
 

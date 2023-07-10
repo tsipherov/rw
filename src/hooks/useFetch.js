@@ -12,10 +12,19 @@ export const useFetch = (serviceMethod) => {
 
   const apiServices = new ApiService();
 
-  const createFetchOptions = useCallback((serviceMethod, options = {}) => {
-    const requestOptions = {
-      ...options,
-    };
+  const createFetchOptions = useCallback((serviceMethod, bodyData) => {
+    const requestOptions = bodyData
+      ? {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            ...bodyData,
+          }),
+        }
+      : null;
     console.log("requestOptions: ", requestOptions);
     if (serviceMethod) setService(serviceMethod);
     setOptions(requestOptions);
@@ -24,9 +33,7 @@ export const useFetch = (serviceMethod) => {
 
   useEffect(() => {
     if (!isLoading) return;
-    console.log("method >>> ", service);
     apiServices[service](options)
-      // .then((res) => res.json())
       .then((res) => {
         console.log(">>>>>    сработал запрос    >>> ");
         setResponse(res);

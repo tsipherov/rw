@@ -22,11 +22,12 @@ export default class ApiService {
       `${API_URL}/authentication/token/validate_with_login?api_key=${API_KEY_3}`,
       options
     );
-    if (!response.ok)
-      throw new Error(
-        `Failed to validate login. Response status: ${response.status}`
-      );
     const data = await response.json();
+    if (!response.ok) {
+      throw new Error(
+        `${data.status_message} Status code: ${data.status_code}`
+      );
+    }
     const result = { validateLogin: data.success };
     return result;
   };
@@ -41,6 +42,15 @@ export default class ApiService {
         `Failed to create session. Response status: ${response.status}`
       );
     const result = await response.json();
+    return result;
+  };
+
+  getAccountDetails = async (session_id) => {
+    const response = await fetch(
+      `${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`
+    );
+    const result = await response.json();
+    console.log("getAccountDetails result  >>>", result);
     return result;
   };
 

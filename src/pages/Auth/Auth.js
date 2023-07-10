@@ -4,13 +4,15 @@ import { useFetch } from "../../hooks/useFetch";
 import BackendErrorMessage from "../../components/BackendErrorMessage/BackendErrorMessage";
 import { useLocalStorage } from "../../hooks/useLocalStogage";
 import "./main.css";
+import ApiService from "../../services/apiService";
+import { UserContext } from "../../contexts/userContext";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [isSaccessSubmit, setIsSaccessSubmit] = useState(false);
-  // const [currentUser, setCurrentUser] = useContext(UserContext);
+  const [currentUser, setCurrentUser] = useContext(UserContext);
 
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -24,7 +26,7 @@ const Auth = () => {
 
   const [{ isLoading, response, error }, createFetchOptions] =
     useFetch("getAuthentication");
-
+  const apiServices = new ApiService();
   useEffect(() => {
     // console.log("useEff err>> ", error);
     // console.log("useEff response>> ", response);
@@ -34,23 +36,28 @@ const Auth = () => {
     }
     if (!error && response?.validateLogin) {
       createFetchOptions("createSession", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          request_token: token,
-        }),
+        request_token: token,
       });
     }
     if (response?.session_id) {
       setSessionId(response.session_id);
-      // console.log("session_id >>> ", response.session_id);
     }
-    if (sessionId) navigate("/");
+    if (sessionId) {
+      getUserDetails();
+      navigate("/");
+    }
     // eslint-disable-next-line
   }, [response, error, isLoading]);
+
+  const getUserDetails = async () => {
+    const data = await apiServices.getAccountDetails(sessionId);
+    setCurrentUser({
+      isLoading: false,
+      isLogedIn: true,
+      currentUser: data,
+    });
+    console.log("getUserDetails >>>> ", data);
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -58,16 +65,11 @@ const Auth = () => {
     // const user = isLogin ? { email, password } : { username, email, password };
 
     createFetchOptions("validateLogin", {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        username: "tsipherov",
-        password: "ih5jA5qCykHM.x8",
-        request_token: token,
-      }),
+      username: "tsipherov",
+      password: "ih5jA5qCykHM.x8",
+      // username,
+      // password,
+      request_token: token,
     });
   };
 
@@ -95,6 +97,7 @@ const Auth = () => {
                     onChange={(e) => {
                       setUsername(e.target.value);
                     }}
+                    required
                   />
                 </fieldset>
 
@@ -108,6 +111,7 @@ const Auth = () => {
                       onChange={(e) => {
                         setEmail(e.target.value);
                       }}
+                      required
                     />
                   )}
                 </fieldset>
@@ -120,6 +124,7 @@ const Auth = () => {
                     onChange={(e) => {
                       setPassword(e.target.value);
                     }}
+                    required
                   />
                 </fieldset>
                 <button
