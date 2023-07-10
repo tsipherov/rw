@@ -12,7 +12,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [isSaccessSubmit, setIsSaccessSubmit] = useState(false);
-  const [currentUser, setCurrentUser] = useContext(UserContext);
+  const [currentUser, setCurrentUser, getUserDetails] = useContext(UserContext);
 
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -43,21 +43,11 @@ const Auth = () => {
       setSessionId(response.session_id);
     }
     if (sessionId) {
-      getUserDetails();
+      getUserDetails(sessionId);
       navigate("/");
     }
     // eslint-disable-next-line
   }, [response, error, isLoading]);
-
-  const getUserDetails = async () => {
-    const data = await apiServices.getAccountDetails(sessionId);
-    setCurrentUser({
-      isLoading: false,
-      isLogedIn: true,
-      currentUser: data,
-    });
-    console.log("getUserDetails >>>> ", data);
-  };
 
   const submitHandler = (e) => {
     e.preventDefault();

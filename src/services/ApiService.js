@@ -50,7 +50,6 @@ export default class ApiService {
       `${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`
     );
     const result = await response.json();
-    console.log("getAccountDetails result  >>>", result);
     return result;
   };
 

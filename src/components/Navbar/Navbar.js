@@ -1,11 +1,14 @@
-import React, { useContext } from "react";
-import "./Navbar.css";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { UserContext } from "../../contexts/userContext";
+import { useLocalStorage } from "../../hooks/useLocalStogage";
+import ApiService from "../../services/apiService";
+import "./Navbar.css";
 
 const Navbar = () => {
   const [currentUser, setCurrentUser] = useContext(UserContext);
-  console.log("currentUser >>>> ", currentUser);
+  const userData = currentUser?.currentUser;
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-xxl">
@@ -40,15 +43,20 @@ const Navbar = () => {
                 Watch
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink to="/login" className="nav-link">
-                Login
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <span>{currentUser.currentUser?.username}</span>
-              <img src="https://api.themoviedb.org/3/account/18546514//OdBNk07pRFVNpOyF6a1uHzLBMA.jpg" />
-            </li>
+            {!userData ? (
+              <li className="nav-item">
+                <NavLink to="/login" className="nav-link">
+                  Login
+                </NavLink>
+              </li>
+            ) : (
+              <li className="nav-item avatar">
+                <img
+                  src={`https://secure.gravatar.com/avatar/${userData?.avatar.gravatar.hash}?s=32`}
+                />
+                <span>{userData?.username}</span>
+              </li>
+            )}
           </ul>
           <form className="d-flex">
             <input

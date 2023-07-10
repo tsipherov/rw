@@ -5,3 +5,14 @@
 .logo img {
   width: 60px;
 }
+
+.avatar {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.avatar img {
+  margin-right: 10px;
+  border-radius: 50%;
+}

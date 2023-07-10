@@ -27,28 +27,6 @@ class HomePage extends React.Component {
   service = new ApiService();
 
   componentDidMount() {
-    // this.service
-    //   .getAuthentication()
-    //   .then((res) => res.json())
-    //   .then((res) => {
-    //     console.log("getToken >>> ", res.request_token);
-    //     const options = {
-    //       method: "POST",
-    //       // mode: "cors",
-    //       headers: {
-    //         "Content-type": "application/json",
-    //       },
-    //       body: JSON.stringify({
-    //         username: "tsipherov",
-    //         password: "ih5jA5qCykHM.x8",
-    //         request_token: res.request_token,
-    //       }),
-    //     };
-    //     this.service
-    //       .validateLogin(options)
-    //       .then((res) => res.json())
-    //       .then((res) => console.log("getAuthentication >>> ", res));
-    //   });
     this.service
       .getGenre()
       .then((res) => res.json())
@@ -144,19 +122,6 @@ class HomePage extends React.Component {
             filters={this.state.filters}
             page={page}
           />
-
-          {/* <div className="d-flex flex-column col-2">
-            <p>Will watch: {this.state.watchList.length}</p>
-            <div className="d-flex flex-column">
-            {this.state.watchList.map((movie) => {
-              return (
-                <div className="col" key={movie.id}>
-                <WillWatchCard data={movie} />
-                  </div>
-                  );
-                })}
-                </div>
-              </div> */}
         </div>
       </div>
     );

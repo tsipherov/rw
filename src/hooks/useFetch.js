@@ -25,7 +25,7 @@ export const useFetch = (serviceMethod) => {
           }),
         }
       : null;
-    console.log("requestOptions: ", requestOptions);
+    // console.log("requestOptions: ", requestOptions);
     if (serviceMethod) setService(serviceMethod);
     setOptions(requestOptions);
     setIsLoading(true);
