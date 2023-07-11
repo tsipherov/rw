@@ -1,19 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { UserContext } from "../../contexts/userContext";
 import { useLocalStorage } from "../../hooks/useLocalStogage";
 import ApiService from "../../services/apiService";
 import "./Navbar.css";
+import AccountMenu from "../AccountMenu/AccountMenu";
 
 const Navbar = () => {
-  const [currentUser, setCurrentUser] = useContext(UserContext);
-  const userData = currentUser?.currentUser;
+  const [{ isLogedIn, currentUser }, setCurrentUser] = useContext(UserContext);
+  // const isLogedIn = currentUser.isLogedIn;
+  const userData = currentUser;
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-xxl">
         <Link to="/" className="logo">
-          <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" />
+          <img
+            src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg"
+            alt="logo"
+          />
         </Link>
         <button
           className="navbar-toggler"
@@ -33,28 +38,32 @@ const Navbar = () => {
                 Home
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink to="/favorites" className="nav-link">
-                Favorites
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/watch" className="nav-link">
-                Watch
-              </NavLink>
-            </li>
-            {!userData ? (
+            {isLogedIn ? (
+              <>
+                <li className="nav-item">
+                  <NavLink to="/favorites" className="nav-link">
+                    Favorites
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/watch" className="nav-link">
+                    Watch
+                  </NavLink>
+                </li>
+                <li className="nav-item avatar">
+                  <img
+                    src={`https://secure.gravatar.com/avatar/${userData?.avatar.gravatar.hash}?s=32`}
+                    alt="account avatar"
+                  />
+                  <span>{userData?.username}</span>
+                  <AccountMenu />
+                </li>
+              </>
+            ) : (
               <li className="nav-item">
                 <NavLink to="/login" className="nav-link">
                   Login
                 </NavLink>
-              </li>
-            ) : (
-              <li className="nav-item avatar">
-                <img
-                  src={`https://secure.gravatar.com/avatar/${userData?.avatar.gravatar.hash}?s=32`}
-                />
-                <span>{userData?.username}</span>
               </li>
             )}
           </ul>

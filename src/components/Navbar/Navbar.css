@@ -1,3 +1,7 @@
+#root .navbar {
+  border-radius: 0;
+}
+
 .logo {
   margin-right: 40px;
 }
@@ -6,13 +10,27 @@
   width: 60px;
 }
 
+.nav-item {
+  height: 38px;
+}
+
 .avatar {
   display: flex;
   align-items: center;
   cursor: pointer;
+  position: relative;
 }
 
 .avatar img {
   margin-right: 10px;
   border-radius: 50%;
+}
+
+.avatar:hover>.accountMenu {
+  /* display: block; */
+  left: 0;
+  right: 0;
+  top: 100%;
+  opacity: 1;
+  /* transition: all 1.5s ease; */
 }
