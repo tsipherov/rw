@@ -12,24 +12,27 @@ export const useFetch = (serviceMethod) => {
 
   const apiServices = new ApiService();
 
-  const createFetchOptions = useCallback((serviceMethod, bodyData) => {
-    const requestOptions = bodyData
-      ? {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            ...bodyData,
-          }),
-        }
-      : null;
-    // console.log("requestOptions: ", requestOptions);
-    if (serviceMethod) setService(serviceMethod);
-    setOptions(requestOptions);
-    setIsLoading(true);
-  }, []);
+  const createFetchOptions = useCallback(
+    (serviceMethod, bodyData, httpMethod = "POST") => {
+      const requestOptions = bodyData
+        ? {
+            method: httpMethod,
+            mode: "cors",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              ...bodyData,
+            }),
+          }
+        : null;
+      // console.log("requestOptions: ", requestOptions);
+      if (serviceMethod) setService(serviceMethod);
+      setOptions(requestOptions);
+      setIsLoading(true);
+    },
+    []
+  );
 
   useEffect(() => {
     if (!isLoading) return;

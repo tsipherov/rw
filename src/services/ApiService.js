@@ -45,6 +45,20 @@ export default class ApiService {
     return result;
   };
 
+  deleteSession = async (options) => {
+    const response = await fetch(
+      `${API_URL}/authentication/session?api_key=${API_KEY_3}`,
+      options
+    );
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(
+        `${data.status_message} Status code: ${data.status_code}`
+      );
+    }
+    return data;
+  };
+
   getAccountDetails = async (session_id) => {
     const response = await fetch(
       `${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`

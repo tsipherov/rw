@@ -52,7 +52,7 @@ const Navbar = () => {
                 </li>
                 <li className="nav-item avatar">
                   <img
-                    src={`https://secure.gravatar.com/avatar/${userData?.avatar.gravatar.hash}?s=32`}
+                    src={`https://secure.gravatar.com/avatar/${userData?.avatar?.gravatar.hash}?s=32`}
                     alt="account avatar"
                   />
                   <span>{userData?.username}</span>
