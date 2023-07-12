@@ -106,4 +106,13 @@ export default class ApiService {
     const result = await response.json();
     return result;
   };
+
+  getWatchlistMovies = async (account_id, options) => {
+    const response = await fetch(
+      `${API_URL}/account/${account_id}/watchlist/movies?api_key=${API_KEY_3}&language=uk-UA`,
+      options
+    );
+    const result = await response.json();
+    return result;
+  };
 }

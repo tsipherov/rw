@@ -3,6 +3,8 @@ import { UserContext } from "../../contexts/userContext";
 import ApiService from "../../services/apiService";
 import MoviesList from "../../components/MovieList/MoviesList";
 
+const API_KEY_4 = process.env.REACT_APP_API_KEY_4;
+
 const FavoritesPage = () => {
   const [user, setUser] = useContext(UserContext);
   const [moviesList, setMoviesList] = useState([]);
@@ -12,8 +14,7 @@ const FavoritesPage = () => {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxOTFhNjQ1YmNhY2I3Y2Y5ZTU5OWU5NjMwODBmMjM3ZSIsInN1YiI6IjY0MjA4ZThkMDhjZjg3MDBkZWZlNzJiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.SOguiOTPWAoqq0EvtYX1MFzTXw2xghU9Hv8BZEaOjS0",
+      Authorization: `Bearer ${API_KEY_4}`,
     },
   };
 
