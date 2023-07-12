@@ -15,7 +15,7 @@ const Filters = ({
   ];
 
   return (
-    <div className="d-flex flex-column col-2">
+    <div className="d-flex flex-column col-2 border">
       <h5 className="pt-4">Sort Results By</h5>
       <Select data={sortByFilters} handler={handlerSortTabs} />
 

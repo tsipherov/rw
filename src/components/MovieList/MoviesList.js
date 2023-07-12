@@ -9,12 +9,7 @@ const MoviesList = ({ movies, page, handlerPagination }) => {
     <div className="d-flex filmsList col-10 mb-5">
       {movies.map((movie) => (
         <div className="film-card" key={movie.id}>
-          <MovieItem
-            data={movie}
-            // handle={this.handleDelete}
-            // handlerWillWatch={this.handlerWillWatchAdd}
-            // handlerRemoveWillWatch={this.handlerWillWatchRemove}
-          />
+          <MovieItem data={movie} />
         </div>
       ))}
       <div className="d-flex row w-100 py-5">

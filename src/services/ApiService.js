@@ -87,9 +87,23 @@ export default class ApiService {
   };
 
   getMovieDetails = async (movie_id) => {
-    const result = await fetch(
+    const response = await fetch(
       `${API_URL}/movie/${movie_id}?api_key=${API_KEY_3}&language=uk-UA`
     );
+    const result = response.json();
+    if (!response.ok)
+      throw new Error(
+        `${result.status_message} Status code: ${result.status_code}`
+      );
+    return result;
+  };
+
+  getFavoriteMovies = async (account_id, options) => {
+    const response = await fetch(
+      `${API_URL}/account/${account_id}/favorite/movies?api_key=${API_KEY_3}`,
+      options
+    );
+    const result = await response.json();
     return result;
   };
 }

@@ -1,0 +1,77 @@
+.singleMoviePage {
+    display: grid;
+    gap: 1rem;
+    grid-template-areas: 'poster header'
+        'poster details'
+        'description description';
+    padding: 2rem;
+}
+
+
+
+.singleMovieTitle {
+    grid-area: header;
+    text-align: center;
+    font-size: 3rem;
+    color: var(--main-clr);
+}
+
+.singleMoviePoster {
+    grid-area: poster;
+    width: 400px;
+}
+
+.singleMovieDetails {
+    grid-area: details;
+    width: 700px;
+}
+
+.singleMovieDescription {
+    grid-area: description;
+}
+
+.singleMovieDetailName {
+    display: block;
+    color: rgb(167, 167, 167);
+    font-weight: bold;
+    min-width: 200px;
+    margin-left: 10px;
+}
+
+.singleMovieProdCompany {
+    padding-right: 35px;
+    display: inline-block;
+}
+
+.singleMovieDetails ul {
+    padding: 0;
+}
+
+.singleMovieDetails li {
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #f5f5f5;
+    display: flex;
+
+}
+
+.singleMovieDetails li:first-child {
+    background-color: transparent;
+    margin: 50px 10px;
+}
+
+.singleMovieCompanyLogo {
+    max-height: 30px;
+    max-width: 150px;
+
+    padding-right: 25px;
+    /* padding-top: 10px; */
+}
+
+.singleMovieProdCountry {
+    padding-right: 10px;
+}
+
+.singleMovieGenres {
+    padding: 0 5px;
+}

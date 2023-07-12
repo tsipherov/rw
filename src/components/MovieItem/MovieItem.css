@@ -1,6 +1,13 @@
 .card {
   height: 100%;
-  box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.card:hover {
+  border: 1px solid var(--main-clr);
+  box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.5);
+  transform: scale(1.01);
+  transition: all .5s ease;
 }
 
 .card-body {

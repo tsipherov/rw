@@ -7,6 +7,7 @@ import FavoritesPage from "./pages/FavoritesPage/FavoritesPage";
 import WatchPage from "./pages/WatchPage/WatchPage";
 import { UserProvider } from "./contexts/userContext";
 import "./App.css";
+import SingleMoviePage from "./pages/SingleMoviePage/SingleMoviePage";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/movie/:movie_id" element={<SingleMoviePage />} />
           <Route path="login" element={<Auth />} />
           <Route path="register" element={<Auth />} />
           <Route path="favorites" element={<FavoritesPage />} />
