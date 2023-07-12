@@ -51,10 +51,14 @@ const MovieItem = ({
       <div className="card-body">
         <h5 className="card-title">{title}</h5>
         <div className="d-flex justify-content-between">
-          <div>
-            <p className="card-text">Rating: {vote_average}</p>
-            <p className="card-text">{release_date}</p>
-          </div>
+          <span className="card-text">
+            Rating:{" "}
+            <span className="cardRating">{vote_average.toFixed(1)}</span>
+          </span>
+          <span className="card-text cardYear">
+            {new Date(release_date).getFullYear()}
+          </span>
+          {/* <div className="cardDescript"></div> */}
           {handlerWillWatch ? (
             <button
               type="button"

@@ -28,7 +28,11 @@ const FavoritesPage = () => {
       setMoviesList(favorList.results);
     }
   }, [user]);
-  return <MoviesList movies={moviesList} handlerPagination={() => {}} />;
+  return (
+    <div className="container-xxl">
+      <MoviesList movies={moviesList} handlerPagination={() => {}} />;
+    </div>
+  );
 };
 
 export default FavoritesPage;

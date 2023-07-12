@@ -17,11 +17,28 @@
 }
 
 .card-title {
+  font-size: 1rem;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+
+.cardDescript {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-text {
+  display: inline-block;
+  font-size: 0.8rem;
+  margin-bottom: 1px;
+}
+
+.cardRating,
+.cardYear {
+  font-weight: 700;
 }
 
 .imgCard {

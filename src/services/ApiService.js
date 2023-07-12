@@ -100,7 +100,7 @@ export default class ApiService {
 
   getFavoriteMovies = async (account_id, options) => {
     const response = await fetch(
-      `${API_URL}/account/${account_id}/favorite/movies?api_key=${API_KEY_3}`,
+      `${API_URL}/account/${account_id}/favorite/movies?api_key=${API_KEY_3}&language=uk-UA`,
       options
     );
     const result = await response.json();
