@@ -1,7 +1,6 @@
 import React from "react";
 
 const Select = ({ data, handler, defaultOption }) => {
-  // console.log("data >>> ", data);
   return (
     <select
       className="form-select"

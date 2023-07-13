@@ -4,7 +4,6 @@ import { useFetch } from "../../hooks/useFetch";
 import BackendErrorMessage from "../../components/BackendErrorMessage/BackendErrorMessage";
 import { useLocalStorage } from "../../hooks/useLocalStogage";
 import "./main.css";
-import ApiService from "../../services/apiService";
 import { UserContext } from "../../contexts/userContext";
 
 const Auth = () => {
@@ -13,6 +12,7 @@ const Auth = () => {
   const [username, setUsername] = useState("");
   const [isSaccessSubmit, setIsSaccessSubmit] = useState(false);
   const [currentUser, setCurrentUser, getUserDetails] = useContext(UserContext);
+  const [token, setToken] = useState(null);
 
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -21,23 +21,24 @@ const Auth = () => {
   const pageTitle = isLogin ? "Sign In" : "Sign Up";
   const descriptionLink = isLogin ? "/register" : "/login";
   const descriptionText = isLogin ? "Need an account?" : "Have an account?";
-  const [token, setToken] = useLocalStorage("token");
   const [sessionId, setSessionId] = useLocalStorage("session_id");
 
-  const [{ isLoading, response, error }, createFetchOptions] =
-    useFetch("getAuthentication");
-  const apiServices = new ApiService();
+  const [{ isLoading, response, error }, createFetchRequest] = useFetch();
   useEffect(() => {
-    // console.log("useEff err>> ", error);
-    // console.log("useEff response>> ", response);
-    if (!isLoading && !response && !error) createFetchOptions();
+    if (!isLoading && !response && !error)
+      createFetchRequest("getAuthentication");
     if (response?.request_token) {
       setToken(response.request_token);
     }
     if (!error && response?.validateLogin) {
-      createFetchOptions("createSession", {
-        request_token: token,
-      });
+      createFetchRequest(
+        "createSession",
+        [],
+        {
+          request_token: token,
+        },
+        "POST"
+      );
     }
     if (response?.session_id) {
       setSessionId(response.session_id);
@@ -54,13 +55,18 @@ const Auth = () => {
 
     // const user = isLogin ? { email, password } : { username, email, password };
 
-    createFetchOptions("validateLogin", {
-      username: "tsipherov",
-      password: "ih5jA5qCykHM.x8",
-      // username,
-      // password,
-      request_token: token,
-    });
+    createFetchRequest(
+      "validateLogin",
+      [],
+      {
+        username: "tsipherov",
+        password: "ih5jA5qCykHM.x8",
+        // username,
+        // password,
+        request_token: token,
+      },
+      "POST"
+    );
   };
 
   if (isSaccessSubmit) {

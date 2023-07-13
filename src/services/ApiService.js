@@ -5,9 +5,10 @@ const API_KEY_3 = process.env.REACT_APP_API_KEY_3;
 // const API_KEY_4 = process.env.REACT_APP_API_KEY_4;
 
 export default class ApiService {
-  getAuthentication = async () => {
+  getAuthentication = async ({ reqOptions }) => {
     const response = await fetch(
-      `${API_URL}/authentication/token/new?api_key=${API_KEY_3}&language=uk-UA`
+      `${API_URL}/authentication/token/new`,
+      reqOptions
     );
     if (!response.ok)
       throw new Error(
@@ -17,10 +18,10 @@ export default class ApiService {
     return data;
   };
 
-  validateLogin = async (options) => {
+  validateLogin = async ({ reqOptions }) => {
     const response = await fetch(
-      `${API_URL}/authentication/token/validate_with_login?api_key=${API_KEY_3}`,
-      options
+      `${API_URL}/authentication/token/validate_with_login`,
+      reqOptions
     );
     const data = await response.json();
     if (!response.ok) {
@@ -32,10 +33,10 @@ export default class ApiService {
     return result;
   };
 
-  createSession = async (options) => {
+  createSession = async ({ reqOptions }) => {
     const response = await fetch(
-      `${API_URL}/authentication/session/new?api_key=${API_KEY_3}`,
-      options
+      `${API_URL}/authentication/session/new`,
+      reqOptions
     );
     if (!response.ok)
       throw new Error(
@@ -45,10 +46,10 @@ export default class ApiService {
     return result;
   };
 
-  deleteSession = async (options) => {
+  deleteSession = async ({ reqOptions }) => {
     const response = await fetch(
-      `${API_URL}/authentication/session?api_key=${API_KEY_3}`,
-      options
+      `${API_URL}/authentication/session`,
+      reqOptions
     );
     const data = await response.json();
     if (!response.ok) {
@@ -67,23 +68,41 @@ export default class ApiService {
     return result;
   };
 
-  getMovies = async (filters, page) => {
+  getMovies = async ({ serviceProps, reqOptions }) => {
+    console.log("getMovies serviceProps  >>> ", serviceProps);
+    const [filters, page] = serviceProps;
     const searchParams = Object.keys(filters)
       .map((filter) => {
         if (filters[filter] !== "all") return `&${filter}=${filters[filter]}`;
       })
       .join("");
-    const result = await fetch(
-      `${API_URL}/discover/movie?api_key=${API_KEY_3}${searchParams}&language=uk-UA&page=${page}`
+    const response = await fetch(
+      `${API_URL}/discover/movie?page=${page}${searchParams}&language=uk-UA`,
+      reqOptions
     );
-    return result;
+    const data = await response.json();
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(
+        `${data.status_message} Status code: ${data.status_code}`
+      );
+    }
   };
 
-  getGenre = async () => {
-    const result = await fetch(
-      `${API_URL}/genre/movie/list?api_key=${API_KEY_3}&language=uk-UA`
+  getGenre = async ({ reqOptions }) => {
+    const response = await fetch(
+      `${API_URL}/genre/movie/list?language=uk-UK`,
+      reqOptions
     );
-    return result;
+    const data = await response.json();
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(
+        `${data.status_message} Status code: ${data.status_code}`
+      );
+    }
   };
 
   getMovieDetails = async (movie_id) => {
@@ -98,10 +117,11 @@ export default class ApiService {
     return result;
   };
 
-  getFavoriteMovies = async (account_id, options) => {
+  getFavoriteMovies = async ({ serviceProps, reqOptions }) => {
+    const [account_id, page] = serviceProps;
     const response = await fetch(
-      `${API_URL}/account/${account_id}/favorite/movies?api_key=${API_KEY_3}&language=uk-UA`,
-      options
+      `${API_URL}/account/${account_id}/favorite/movies?page=${page}&language=uk-UA`,
+      reqOptions
     );
     const result = await response.json();
     return result;

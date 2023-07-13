@@ -9,8 +9,7 @@ const AccountMenu = () => {
   const [session_id, setSessionId] = useLocalStorage("session_id");
   const navigate = useNavigate();
   const [, setUserContext] = useContext(UserContext);
-  const [{ isLoading, response, error }, createFetchOptions] =
-    useFetch("deleteSession");
+  const [{ isLoading, response, error }, createFetchRequest] = useFetch();
 
   useEffect(() => {
     if (response?.success && !error) {
@@ -27,7 +26,7 @@ const AccountMenu = () => {
   };
 
   const logOutHendler = () => {
-    createFetchOptions("deleteSession", { session_id }, "DELETE");
+    createFetchRequest("deleteSession", [], { session_id }, "DELETE");
   };
 
   return (

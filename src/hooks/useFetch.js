@@ -9,31 +9,29 @@ export const useFetch = () => {
   const [error, setError] = useState(null);
   const [reqOptions, setReqOptions] = useState({});
   const [service, setService] = useState(null);
-  const [serviceProps, setServiceProps] = useState({});
+  const [serviceProps, setServiceProps] = useState([]);
 
   const API_KEY_4 = process.env.REACT_APP_API_KEY_4;
   const apiServices = new ApiService();
 
   const createFetchOptions = useCallback(
-    (bodyData = {}, httpMethod = "GET") => {
-      const requestOptions = bodyData
-        ? {
-            method: httpMethod,
-            mode: "cors",
-            headers: {
-              accept: "application/json",
-              Authorization: `Bearer ${API_KEY_4}`,
-            },
-            // headers: {
-            //   "Content-type": "application/json",
-            // },
-            body: JSON.stringify({
-              ...bodyData,
-            }),
-          }
-        : null;
-      console.log("requestOptions: ", requestOptions);
-      // if (serviceMethod) setService(serviceMethod);
+    (bodyData = null, httpMethod = "GET") => {
+      const requestOptions = {
+        method: httpMethod,
+        mode: "cors",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+          Authorization: `Bearer ${API_KEY_4}`,
+        },
+      };
+
+      if (bodyData) {
+        requestOptions.body = JSON.stringify({
+          ...bodyData,
+        });
+      }
+
       setReqOptions(requestOptions);
       setIsLoading(true);
     },
@@ -42,8 +40,9 @@ export const useFetch = () => {
 
   const createFetchRequest = (
     serviceMethod,
-    serviceMethodProps = {},
-    { bodyData, httpMethod }
+    serviceMethodProps,
+    bodyData,
+    httpMethod
   ) => {
     setService(serviceMethod);
     setServiceProps(serviceMethodProps);
@@ -51,14 +50,18 @@ export const useFetch = () => {
   };
 
   useEffect(() => {
+    console.log(`>>>>>  start ${service} method  >>>`);
+    // console.log("reqOptions: ", reqOptions);
+    // console.log("serviceMethodProps: ", serviceProps);
+
     if (!isLoading) return;
-    apiServices[service](...serviceProps, reqOptions)
+    apiServices[service]({ serviceProps, reqOptions })
       .then((res) => {
-        console.log(">>>>>    сработал запрос    >>> ");
+        console.log(`>>>>>  сработал ${service} method  >>>`);
         setResponse(res);
       })
       .catch((err) => {
-        console.log("err: ", err.message);
+        console.log("err: ", err);
         setError(err);
       })
       .finally(() => {
@@ -66,7 +69,7 @@ export const useFetch = () => {
         setIsLoading(false);
       });
     // eslint-disable-next-line
-  }, [isLoading]);
+  }, [isLoading, reqOptions]);
 
   return [{ isLoading, response, error }, createFetchRequest];
 };
