@@ -3,7 +3,6 @@ import Select from "../UI/Select/Select";
 
 const Filters = ({
   genreList,
-  createYearSelect,
   handlerSortTabs,
   handlerGenres,
   handlerReleaseYear,
@@ -13,6 +12,15 @@ const Filters = ({
     { id: "revenue.desc", name: "Revenue" },
     { id: "vote_average.desc", name: "Vote average" },
   ];
+
+  const createYearSelect = (years) => {
+    const yearsArr = new Array(years);
+    const currentYear = new Date().getFullYear();
+    for (let i = 0; i < years; i++) {
+      yearsArr[i] = { id: currentYear - i, name: currentYear - i };
+    }
+    return yearsArr;
+  };
 
   return (
     <div className="d-flex flex-column col-2 border">
@@ -28,7 +36,7 @@ const Filters = ({
 
       <h5 className="pt-4">Release year</h5>
       <Select
-        data={createYearSelect(100)}
+        data={createYearSelect(75)}
         handler={handlerReleaseYear}
         defaultOption={{ id: "all", name: "All years" }}
       />

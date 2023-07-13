@@ -3,52 +3,70 @@ import { useCallback, useEffect, useState } from "react";
 // import { useLocalStorage } from "./useLocalStorage";
 import ApiService from "../services/apiService";
 
-export const useFetch = (serviceMethod) => {
+export const useFetch = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
-  const [options, setOptions] = useState({});
-  const [service, setService] = useState(serviceMethod);
+  const [reqOptions, setReqOptions] = useState({});
+  const [service, setService] = useState(null);
+  const [serviceProps, setServiceProps] = useState({});
 
+  const API_KEY_4 = process.env.REACT_APP_API_KEY_4;
   const apiServices = new ApiService();
 
   const createFetchOptions = useCallback(
-    (serviceMethod, bodyData, httpMethod = "POST") => {
+    (bodyData = {}, httpMethod = "GET") => {
       const requestOptions = bodyData
         ? {
             method: httpMethod,
             mode: "cors",
             headers: {
-              "Content-type": "application/json",
+              accept: "application/json",
+              Authorization: `Bearer ${API_KEY_4}`,
             },
+            // headers: {
+            //   "Content-type": "application/json",
+            // },
             body: JSON.stringify({
               ...bodyData,
             }),
           }
         : null;
-      // console.log("requestOptions: ", requestOptions);
-      if (serviceMethod) setService(serviceMethod);
-      setOptions(requestOptions);
+      console.log("requestOptions: ", requestOptions);
+      // if (serviceMethod) setService(serviceMethod);
+      setReqOptions(requestOptions);
       setIsLoading(true);
     },
     []
   );
 
+  const createFetchRequest = (
+    serviceMethod,
+    serviceMethodProps = {},
+    { bodyData, httpMethod }
+  ) => {
+    setService(serviceMethod);
+    setServiceProps(serviceMethodProps);
+    createFetchOptions(bodyData, httpMethod);
+  };
+
   useEffect(() => {
     if (!isLoading) return;
-    apiServices[service](options)
+    apiServices[service](...serviceProps, reqOptions)
       .then((res) => {
         console.log(">>>>>    сработал запрос    >>> ");
         setResponse(res);
-        setIsLoading(false);
       })
       .catch((err) => {
         console.log("err: ", err.message);
         setError(err);
+      })
+      .finally(() => {
+        console.log("Finally!!!");
         setIsLoading(false);
       });
     // eslint-disable-next-line
-  }, [isLoading, options, service]);
+  }, [isLoading]);
 
-  return [{ isLoading, response, error }, createFetchOptions];
+  return [{ isLoading, response, error }, createFetchRequest];
 };
