@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ApiService from "../../services/apiService";
 import "./SingleMoviePage.css";
+import { useFetch } from "../../hooks/useFetch";
+import { UserContext } from "../../contexts/userContext";
 
 const SingleMoviePage = (props) => {
   console.log("props >>>> ", props);
@@ -9,15 +11,49 @@ const SingleMoviePage = (props) => {
   const { movie_id } = useParams();
   const apiService = new ApiService();
 
+  const [{ isLoading, response, error }, createFetchRequest] = useFetch();
+  const [user] = useContext(UserContext);
+
   useEffect(async () => {
     const response = await apiService.getMovieDetails(movie_id);
     console.log("response >>>> ", response);
     setMovie(response);
   }, [movie_id]);
+
+  const addToFavoriteHandler = () => {
+    createFetchRequest(
+      "addFavorite",
+      [user.currentUser.id],
+      {
+        media_type: "movie",
+        media_id: movie_id,
+        favorite: true,
+      },
+      "POST"
+    );
+  };
+
+  const addToWatchHandler = () => {
+    createFetchRequest(
+      "addToWatchlist",
+      [user.currentUser.id],
+      {
+        media_type: "movie",
+        media_id: movie_id,
+        watchlist: true,
+      },
+      "POST"
+    );
+  };
+
   let content = movie ? (
     <div className="container">
       <div className="singleMoviePage">
-        <h2 className="singleMovieTitle">{movie.title}</h2>
+        <h2 className="singleMovieTitle">
+          {movie.title}
+          <button onClick={addToFavoriteHandler}>favorite</button>
+          <button onClick={addToWatchHandler}>watch</button>
+        </h2>
         <img
           className="singleMoviePoster"
           src={`https://image.tmdb.org/t/p/w500${

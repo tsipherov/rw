@@ -127,10 +127,35 @@ export default class ApiService {
     return result;
   };
 
+  addFavorite = async ({ serviceProps, reqOptions }) => {
+    console.log("addFavorite method serviceProps >>>> ", serviceProps);
+    console.log("addFavorite method reqOptions >>>> ", reqOptions);
+    const [account_id] = serviceProps;
+    const response = await fetch(
+      `${API_URL}/account/${account_id}/favorite`,
+
+      reqOptions
+    );
+    const result = await response.json();
+    return result;
+  };
+
   getWatchlistMovies = async (account_id, options) => {
     const response = await fetch(
       `${API_URL}/account/${account_id}/watchlist/movies?api_key=${API_KEY_3}&language=uk-UA`,
       options
+    );
+    const result = await response.json();
+    return result;
+  };
+
+  addToWatchlist = async ({ serviceProps, reqOptions }) => {
+    console.log("addFavorite method serviceProps >>>> ", serviceProps);
+    console.log("addFavorite method reqOptions >>>> ", reqOptions);
+    const [account_id] = serviceProps;
+    const response = await fetch(
+      `${API_URL}/account/${account_id}/watchlist`,
+      reqOptions
     );
     const result = await response.json();
     return result;
