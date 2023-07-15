@@ -105,11 +105,13 @@ export default class ApiService {
     }
   };
 
-  getMovieDetails = async (movie_id) => {
+  getMovieDetails = async ({ serviceProps, reqOptions }) => {
+    const [movie_id] = serviceProps;
     const response = await fetch(
-      `${API_URL}/movie/${movie_id}?api_key=${API_KEY_3}&language=uk-UA`
+      `${API_URL}/movie/${movie_id}?language=uk-UA`,
+      reqOptions
     );
-    const result = response.json();
+    const result = await response.json();
     if (!response.ok)
       throw new Error(
         `${result.status_message} Status code: ${result.status_code}`
@@ -133,7 +135,6 @@ export default class ApiService {
     const [account_id] = serviceProps;
     const response = await fetch(
       `${API_URL}/account/${account_id}/favorite`,
-
       reqOptions
     );
     const result = await response.json();
@@ -155,6 +156,18 @@ export default class ApiService {
     const [account_id] = serviceProps;
     const response = await fetch(
       `${API_URL}/account/${account_id}/watchlist`,
+      reqOptions
+    );
+    const result = await response.json();
+    return result;
+  };
+
+  movieAccountStates = async ({ serviceProps, reqOptions }) => {
+    // console.log("addFavorite method serviceProps >>>> ", serviceProps);
+    // console.log("addFavorite method reqOptions >>>> ", reqOptions);
+    const [movie_id] = serviceProps;
+    const response = await fetch(
+      `${API_URL}/movie/${movie_id}/account_states`,
       reqOptions
     );
     const result = await response.json();

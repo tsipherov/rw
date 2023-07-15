@@ -50,7 +50,7 @@ export const useFetch = () => {
   };
 
   useEffect(() => {
-    console.log(`>>>>>  start ${service} method  >>>`);
+    // console.log(`>>>>>  start ${service} method  >>>`);
     // console.log("reqOptions: ", reqOptions);
     // console.log("serviceMethodProps: ", serviceProps);
 
@@ -58,6 +58,7 @@ export const useFetch = () => {
     apiServices[service]({ serviceProps, reqOptions })
       .then((res) => {
         console.log(`>>>>>  сработал ${service} method  >>>`);
+        console.log(res);
         setResponse(res);
       })
       .catch((err) => {

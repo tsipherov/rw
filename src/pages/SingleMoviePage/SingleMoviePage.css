@@ -26,6 +26,42 @@
     width: 700px;
 }
 
+.singleMovieButtonsBlock {
+    display: flex;
+    justify-content: end;
+}
+
+.singleMovieButtonsBlock button {
+    margin-left: 2rem;
+    width: 5rem;
+    height: 2rem;
+    padding: 5px;
+    font-size: 0.8rem;
+    color: var(--main-clr);
+    border: 2px solid var(--main-clr);
+    background-color: transparent;
+    border-radius: 5px;
+    text-transform: uppercase;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+    transition: all .3s ease;
+}
+
+.singleMovieButtonsBlock button:hover {
+
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    transform: translate(-2px, -2px);
+}
+
+.singleMovieButtonsBlock button:hover,
+.singleMovieButtonsBlock button.active {
+    color: white;
+    background-color: var(--main-clr);
+}
+
+/* .singleMovieButtonsBlock button:disabled {
+    background-color: #7e7e7e;
+} */
+
 .singleMovieDescription {
     grid-area: description;
 }

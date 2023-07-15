@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useLocalStorage } from "../hooks/useLocalStogage";
 import ApiService from "../services/apiService";
+import { useFetch } from "../hooks/useFetch";
 
 export const UserContext = React.createContext([{}, () => {}]);
 
 export const UserProvider = ({ children }) => {
   const [sessionId, setSessionId] = useLocalStorage("session_id");
+  const [{ isLoading, response, error }, createFetchRequest] = useFetch();
   const apiServices = new ApiService();
 
   let contextData = {
@@ -27,7 +29,7 @@ export const UserProvider = ({ children }) => {
       currentUser: data,
     };
     setState(contextData);
-    console.log("context getUserDetails >>>> ", data);
+    // console.log("context getUserDetails >>>> ", data);
   };
 
   return (
