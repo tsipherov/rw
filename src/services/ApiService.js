@@ -174,4 +174,16 @@ export default class ApiService {
     const result = await response.json();
     return result;
   };
+
+  searchMovie = async ({ serviceProps, reqOptions }) => {
+    // console.log("addFavorite method serviceProps >>>> ", serviceProps);
+    // console.log("addFavorite method reqOptions >>>> ", reqOptions);
+    const [searchQuery, page] = serviceProps;
+    const response = await fetch(
+      `${API_URL}/search/movie${searchQuery}&page=${page}&language=uk-UA`,
+      reqOptions
+    );
+    const result = await response.json();
+    return result;
+  };
 }

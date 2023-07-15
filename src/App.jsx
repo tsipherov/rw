@@ -8,6 +8,7 @@ import WatchPage from "./pages/WatchPage/WatchPage";
 import { UserProvider } from "./contexts/userContext";
 import "./App.css";
 import SingleMoviePage from "./pages/SingleMoviePage/SingleMoviePage";
+import SearchPage from "./pages/SearchPage/SearchPage";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="register" element={<Auth />} />
           <Route path="/favorites/:page?" element={<FavoritesPage />} />
           <Route path="watch/:page?" element={<WatchPage />} />
+          <Route path="/search/:page?" element={<SearchPage />} />
         </Routes>
       </BrowserRouter>
     </UserProvider>

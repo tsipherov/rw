@@ -1,13 +1,18 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SearchInput = () => {
-  const [value, setValue] = useState("fuck you");
+  const [value, setValue] = useState("");
+  const navigate = useNavigate();
   const searchButtonHandler = () => {
-    console.log(value);
+    navigate(`/search/1?query=${value}`);
   };
   return (
     <div className="searchInputWrap">
       <input
+        onKeyDown={(e) => {
+          if (e.key === "Enter") searchButtonHandler();
+        }}
         value={value}
         className="searchInputInp"
         type="search"
