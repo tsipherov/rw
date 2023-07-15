@@ -6,6 +6,7 @@ const SearchInput = () => {
   const navigate = useNavigate();
   const searchButtonHandler = () => {
     navigate(`/search/1?query=${value}`);
+    value = "";
   };
   return (
     <div className="searchInputWrap">

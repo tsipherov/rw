@@ -186,4 +186,20 @@ export default class ApiService {
     const result = await response.json();
     return result;
   };
+
+  getVideo = async ({ serviceProps, reqOptions }) => {
+    // console.log("addFavorite method serviceProps >>>> ", serviceProps);
+    // console.log("addFavorite method reqOptions >>>> ", reqOptions);
+    const [movie_id] = serviceProps;
+    const response = await fetch(
+      `${API_URL}/movie/${movie_id}/videos`,
+      reqOptions
+    );
+    const result = await response.json();
+    if (!response.ok)
+      throw new Error(
+        `${result.status_message} Status code: ${result.status_code}`
+      );
+    return result;
+  };
 }

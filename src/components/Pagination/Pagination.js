@@ -2,8 +2,8 @@ import React from "react";
 import "./Pagination.css";
 
 const Pagination = ({ handler, currentPage, maxPage }) => {
-  console.log("currentPage >>>>", currentPage);
-  console.log("maxPage >>>>", maxPage);
+  // console.log("currentPage >>>>", currentPage);
+  // console.log("maxPage >>>>", maxPage);
   return (
     <nav aria-label="Page navigation example">
       <span>

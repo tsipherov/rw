@@ -3,8 +3,14 @@
     gap: 1rem;
     grid-template-areas: 'poster header'
         'poster details'
-        'description description';
+        'description description'
+        'video video';
     padding: 2rem;
+}
+
+iframe {
+    grid-area: video;
+    margin: 0 auto;
 }
 
 
@@ -28,7 +34,7 @@
 
 .singleMovieButtonsBlock {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     margin-bottom: 1rem;
 }
 

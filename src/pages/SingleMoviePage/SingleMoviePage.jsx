@@ -8,6 +8,7 @@ const SingleMoviePage = () => {
   const [movie, setMovie] = useState(null);
   const [stateMovie, setStateMovie] = useState(null);
   const { movie_id } = useParams();
+  const [videoLink, setVideoLink] = useState(null);
 
   const [
     { isLoading: stateIsLoading, response: stateResponse, error: stateError },
@@ -17,6 +18,10 @@ const SingleMoviePage = () => {
   const [
     { isLoading: toggleLoad, response: toggleRes, error: toggleErr },
     toggleRequest,
+  ] = useFetch();
+  const [
+    { isLoading: isLoadVideo, response: responseVideo, error: errVideo },
+    createFetchRequestVideo,
   ] = useFetch();
   const [user] = useContext(UserContext);
 
@@ -28,16 +33,40 @@ const SingleMoviePage = () => {
     }
     if (!movie && response) {
       stateCreateFetchRequest("movieAccountStates", [movie_id]);
+      createFetchRequestVideo("getVideo", [movie_id]);
       setMovie(response);
     }
     if (stateResponse) {
       setStateMovie(stateResponse);
     }
-  }, [movie_id, response, stateResponse, stateError, stateIsLoading]);
+    if (responseVideo) {
+      getVideoLink(responseVideo);
+      // setVideo(responseVideo);
+    }
+  }, [
+    movie_id,
+    response,
+    stateResponse,
+    stateError,
+    stateIsLoading,
+    responseVideo,
+  ]);
 
   useEffect(() => {
     if (toggleLoad) stateCreateFetchRequest("movieAccountStates", [movie_id]);
   }, [toggleRes, toggleLoad]);
+
+  const getVideoLink = (videoLinks) => {
+    if (!videoLinks.results.length) return null;
+    console.log("SingleMoviePage responseVideo >>> ", videoLinks);
+    const trailers = videoLinks.results.filter(
+      (link) => link.site === "YouTube" && link.type === "Trailer"
+    );
+    const youtubeCode = trailers.length
+      ? trailers[0].key
+      : videoLinks.results[0].key;
+    setVideoLink(youtubeCode);
+  };
 
   const addToFavoriteHandler = () => {
     toggleRequest(
@@ -174,6 +203,17 @@ const SingleMoviePage = () => {
             </ul>
           </div>
           <div className="singleMovieDescription">{movie.overview}</div>
+          {videoLink ? (
+            <iframe
+              width="1080"
+              height="607"
+              src={`https://www.youtube.com/embed/${videoLink}`}
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              fullscreen
+            ></iframe>
+          ) : null}
         </div>
       </div>
     ) : null;

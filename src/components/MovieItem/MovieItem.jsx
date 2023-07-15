@@ -39,7 +39,7 @@ const MovieItem = ({
   };
 
   const toDetailPageHandler = (movie_id) => {
-    console.log("movie_id >>>> ", movie_id);
+    // console.log("movie_id >>>> ", movie_id);
     navigate(`/movie/${movie_id}`);
   };
 

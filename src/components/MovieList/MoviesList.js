@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 import "./MoviesList.css";
 
 const MoviesList = ({ data, page, handlerPagination }) => {
-  console.log("data >>>>>> ", data);
+  // console.log("data >>>>>> ", data);
   const { results: movies, total_pages } = data;
-  console.log("movies >>>>>> ", movies);
+  // console.log("movies >>>>>> ", movies);
   return (
     <div className="d-flex filmsList col-10 mb-5">
       {movies.map((movie) => (
