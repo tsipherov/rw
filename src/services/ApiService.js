@@ -141,10 +141,11 @@ export default class ApiService {
     return result;
   };
 
-  getWatchlistMovies = async (account_id, options) => {
+  getWatchlistMovies = async ({ serviceProps, reqOptions }) => {
+    const [account_id, page] = serviceProps;
     const response = await fetch(
-      `${API_URL}/account/${account_id}/watchlist/movies?api_key=${API_KEY_3}&language=uk-UA`,
-      options
+      `${API_URL}/account/${account_id}/watchlist/movies?page=${page}&language=uk-UA`,
+      reqOptions
     );
     const result = await response.json();
     return result;

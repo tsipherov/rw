@@ -21,8 +21,8 @@ const SingleMoviePage = () => {
   const [user] = useContext(UserContext);
 
   useEffect(() => {
-    console.log("SingleMoviePage stateResponse >>>> ", stateResponse);
-    console.log("SingleMoviePage response >>>> ", response);
+    // console.log("SingleMoviePage stateResponse >>>> ", stateResponse);
+    // console.log("SingleMoviePage response >>>> ", response);
     if (movie_id && !movie && !stateResponse && !stateIsLoading) {
       createFetchRequest("getMovieDetails", [movie_id]);
     }
@@ -50,7 +50,6 @@ const SingleMoviePage = () => {
       },
       "POST"
     );
-    // stateCreateFetchRequest("movieAccountStates", [movie_id]);
   };
 
   const addToWatchHandler = () => {
@@ -64,7 +63,6 @@ const SingleMoviePage = () => {
       },
       "POST"
     );
-    // stateCreateFetchRequest("movieAccountStates", [movie_id]);
   };
 
   let content =
@@ -81,6 +79,8 @@ const SingleMoviePage = () => {
           />
           <div className="singleMovieDetails">
             <div className="singleMovieButtonsBlock">
+              {movie.adult ? <div className="adult">18+</div> : null}
+
               <button
                 className={stateMovie.favorite ? "active" : null}
                 onClick={addToFavoriteHandler}

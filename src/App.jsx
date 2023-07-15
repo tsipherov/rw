@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./pages/HomePage/HomePage";
 import Auth from "./pages/Auth/Auth";
@@ -15,12 +15,13 @@ const App = () => {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Navigate to="/movies/1" />} />
+          <Route path="/movies/:page" element={<HomePage />} />
           <Route path="/movie/:movie_id" element={<SingleMoviePage />} />
           <Route path="login" element={<Auth />} />
           <Route path="register" element={<Auth />} />
-          <Route path="favorites" element={<FavoritesPage />} />
-          <Route path="watch" element={<WatchPage />} />
+          <Route path="/favorites/:page?" element={<FavoritesPage />} />
+          <Route path="watch/:page?" element={<WatchPage />} />
         </Routes>
       </BrowserRouter>
     </UserProvider>

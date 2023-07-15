@@ -7,7 +7,7 @@ function Image(props) {
   return (
     <img
       className="card-img-top"
-      src={`https://image.tmdb.org/t/p/w500${
+      src={`https://image.tmdb.org/t/p/w342${
         data.poster_path || data.backdrop_path
       }`}
       alt={data.original_title}

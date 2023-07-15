@@ -5,10 +5,10 @@ import { useLocalStorage } from "../../hooks/useLocalStogage";
 import ApiService from "../../services/apiService";
 import "./Navbar.css";
 import AccountMenu from "../AccountMenu/AccountMenu";
+import SearchInput from "../UI/SearchInput/SearchInput";
 
 const Navbar = () => {
   const [{ isLogedIn, currentUser }, setCurrentUser] = useContext(UserContext);
-  // const isLogedIn = currentUser.isLogedIn;
   const userData = currentUser;
 
   return (
@@ -67,17 +67,7 @@ const Navbar = () => {
               </li>
             )}
           </ul>
-          <form className="d-flex">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Movie title"
-              aria-label="Search"
-            />
-            <button className="btn btn-outline-warning" type="submit">
-              Search
-            </button>
-          </form>
+          <SearchInput />
         </div>
       </div>
     </nav>

@@ -34,3 +34,57 @@
   opacity: 1;
   /* transition: all 1.5s ease; */
 }
+
+.searchInputWrap {
+  display: flex;
+  background: linear-gradient(45deg, #ededed, #ffffff);
+  box-sizing: initial;
+  height: 2rem;
+  border-radius: 2rem;
+  padding: 3px;
+}
+
+.searchInputWrap:hover .searchInputInp,
+.searchInputWrap .searchInputInp:focus {
+  width: 250px;
+  padding: 0px 10px;
+}
+
+.searchInputWrap:hover .searchInputBtn {
+  background-color: #fff;
+}
+
+.searchInputWrap:hover .searchInputBtn svg {
+  fill: var(--main-clr);
+}
+
+.searchInputWrap .searchInputInp {
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  background: none;
+  padding: 0;
+  width: 0;
+  font-size: 1.1rem;
+  color: var(--main-clr);
+  transition: .4s;
+}
+
+.searchInputWrap .searchInputBtn {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--main-clr);
+  /* font-size: 1.2rem; */
+  cursor: pointer;
+  transition: .4s;
+}
+
+.searchInputBtn svg {
+  fill: #ffffff;
+}

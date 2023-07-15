@@ -29,21 +29,30 @@
 .singleMovieButtonsBlock {
     display: flex;
     justify-content: end;
+    margin-bottom: 1rem;
 }
 
-.singleMovieButtonsBlock button {
+.singleMovieButtonsBlock button,
+.singleMovieButtonsBlock .adult {
     margin-left: 2rem;
     width: 5rem;
     height: 2rem;
     padding: 5px;
     font-size: 0.8rem;
     color: var(--main-clr);
-    border: 2px solid var(--main-clr);
     background-color: transparent;
+    border: 2px solid var(--main-clr);
     border-radius: 5px;
     text-transform: uppercase;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
     transition: all .3s ease;
+}
+
+.singleMovieButtonsBlock .adult {
+    border: 2px solid red;
+    color: red;
+    text-align: center;
+    font-weight: bold;
 }
 
 .singleMovieButtonsBlock button:hover {
