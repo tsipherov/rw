@@ -30,6 +30,7 @@ export const UserProvider = ({ children }) => {
     };
     setState(contextData);
     // console.log("context getUserDetails >>>> ", data);
+    return data;
   };
 
   return (

@@ -40,8 +40,8 @@ iframe {
 
 .singleMovieButtonsBlock button,
 .singleMovieButtonsBlock .adult {
-    margin-left: 2rem;
-    width: 5rem;
+    margin-left: 1rem;
+    width: 3rem;
     height: 2rem;
     padding: 5px;
     font-size: 0.8rem;
@@ -125,4 +125,10 @@ iframe {
 
 .singleMovieGenres {
     padding: 0 5px;
+}
+
+.bi .bi-bookmark-plus-fill {
+    /* font-size: 1rem; */
+    color: var(--main-clr);
+    font-weight: bold;
 }

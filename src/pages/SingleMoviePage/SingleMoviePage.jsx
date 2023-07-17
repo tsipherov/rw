@@ -115,14 +115,19 @@ const SingleMoviePage = () => {
                 onClick={addToFavoriteHandler}
                 disabled={stateIsLoading && toggleLoad}
               >
-                favorite
+                <i
+                  className="bi bi-heart"
+                  // style="font-size: 2rem; color: cornflowerblue;"
+                ></i>
+                {/* favor ite */}
               </button>
               <button
                 className={stateMovie.watchlist ? "active" : null}
                 onClick={addToWatchHandler}
                 disabled={stateIsLoading && toggleLoad}
               >
-                watch
+                <i class="bi bi-bookmark-plus"></i>
+                {/* watch */}
               </button>
             </div>
             <h3>{movie.original_title}</h3>

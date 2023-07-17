@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../contexts/userContext";
-import MoviesList from "../../components/MovieList/MoviesList";
 import { useNavigate, useParams } from "react-router-dom";
+import { UserContext } from "../../contexts/userContext";
 import { useFetch } from "../../hooks/useFetch";
+import MoviesList from "../../components/MovieList/MoviesList";
 
 const WatchPage = () => {
   const [user] = useContext(UserContext);

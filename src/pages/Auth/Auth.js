@@ -5,6 +5,8 @@ import BackendErrorMessage from "../../components/BackendErrorMessage/BackendErr
 import { useLocalStorage } from "../../hooks/useLocalStogage";
 import "./main.css";
 import { UserContext } from "../../contexts/userContext";
+import { authSessionId, authUser } from "../../store/actions/auth.actions";
+import { useDispatch } from "react-redux";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -24,6 +26,7 @@ const Auth = () => {
   const [sessionId, setSessionId] = useLocalStorage("session_id");
 
   const [{ isLoading, response, error }, createFetchRequest] = useFetch();
+  const dispatch = useDispatch();
   useEffect(() => {
     if (!isLoading && !response && !error)
       createFetchRequest("getAuthentication");
@@ -41,10 +44,11 @@ const Auth = () => {
       );
     }
     if (response?.session_id) {
+      dispatch(authSessionId(response.session_id));
       setSessionId(response.session_id);
     }
     if (sessionId) {
-      getUserDetails(sessionId);
+      getUserDetails(sessionId).then((user) => dispatch(authUser(user)));
       navigate("/");
     }
     // eslint-disable-next-line
