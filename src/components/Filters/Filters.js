@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Select from "../UI/Select/Select";
 import { useFetch } from "../../hooks/useFetch";
+import { updateFilters } from "../../store/slices/filters.slice";
+import { useDispatch } from "react-redux";
 
 const Filters = ({ filtersHandler }) => {
   const [genreList, setGenreList] = useState([]);
+  const dispatch = useDispatch();
 
   const [{ isLoading, response, error }, createFetchRequest] = useFetch();
 
@@ -36,6 +39,7 @@ const Filters = ({ filtersHandler }) => {
       <Select
         data={sortByFilters}
         handler={(value) => {
+          dispatch(updateFilters({ filter: "sort_by", value }));
           filtersHandler("sort_by", value);
         }}
       />
@@ -45,6 +49,7 @@ const Filters = ({ filtersHandler }) => {
         data={genreList}
         handler={(value) => {
           filtersHandler("with_genres", value);
+          dispatch(updateFilters({ filter: "with_genres", value }));
         }}
         defaultOption={{ id: "all", name: "All genres" }}
       />
@@ -54,6 +59,7 @@ const Filters = ({ filtersHandler }) => {
         data={createYearSelect(75)}
         handler={(value) => {
           filtersHandler("primary_release_year", value);
+          dispatch(updateFilters({ filter: "primary_release_year", value }));
         }}
         defaultOption={{ id: "all", name: "All years" }}
       />
