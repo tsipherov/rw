@@ -22,7 +22,7 @@ ul {
   padding: 0;
 }
 
-ul.pagination {
+.pagination li {
   cursor: pointer;
 }
 

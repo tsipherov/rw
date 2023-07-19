@@ -3,17 +3,13 @@ import Filters from "../../components/Filters/Filters";
 import { useFetch } from "../../hooks/useFetch";
 import MoviesList from "../../components/MovieList/MoviesList";
 import "./HomePage.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { redirect, useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const HomePage = () => {
-  const [filters, setFilters] = useState({
-    sort_by: "popularity.desc",
-    with_genres: "all",
-    primary_release_year: "all",
-  });
+  const filters = useSelector((state) => state.filters);
   const [movies, setMovies] = useState(null);
   const { page = 1 } = useParams();
-  // const [page, setPage] = useState(1);
 
   const [{ isLoading, response, error }, createFetchRequest] = useFetch();
   const navigate = useNavigate();
@@ -26,22 +22,19 @@ const HomePage = () => {
     }
   }, [response, filters, page]);
 
-  const handlerPagination = (page) => {
-    // setPage(page);
-    navigate(`/movies/${page}`);
-  };
+  useEffect(() => {
+    // navigate(`/movies/1`);
+    return redirect("/movies/1");
+  }, [filters]);
 
-  const filtersHandler = (filter, value) => {
-    setFilters({ ...filters, [filter]: value });
-    navigate(`/movies/1`);
-    // setPage(1);
+  const handlerPagination = (page) => {
+    navigate(`/movies/${page}`);
   };
 
   return (
     <div className="container-xxl">
       <div className="row my-3 px-3">
-        <Filters filtersHandler={filtersHandler} />
-
+        <Filters />
         {movies ? (
           <MoviesList
             handlerPagination={handlerPagination}

@@ -1,11 +1,10 @@
 import React from "react";
 
-const Select = ({ data, handler, defaultOption }) => {
+const Select = ({ data, handler, defaultOption, selected }) => {
   return (
     <select
       className="form-select"
-      aria-label="Default select example"
-      defaultValue={"all"}
+      value={selected}
       onChange={(e) => handler(e.target.value)}
     >
       {defaultOption ? (

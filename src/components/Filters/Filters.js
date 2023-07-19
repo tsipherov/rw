@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Select from "../UI/Select/Select";
-import { useFetch } from "../../hooks/useFetch";
 import { updateFilters } from "../../store/slices/filters.slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchGenres } from "../../store/slices/genres.slice";
 
-const Filters = ({ filtersHandler }) => {
-  const [genreList, setGenreList] = useState([]);
+const Filters = () => {
   const dispatch = useDispatch();
-
-  const [{ isLoading, response, error }, createFetchRequest] = useFetch();
+  const filters = useSelector((state) => state.filters);
+  const genreList = useSelector((state) => state.genres.entities);
 
   useEffect(() => {
-    if (!isLoading && !response && !error) createFetchRequest("getGenre");
-
-    if (!isLoading && !error && response) {
-      setGenreList(response.genres);
-    }
-  }, [isLoading, response, error]);
+    dispatch(fetchGenres());
+  }, []);
 
   const sortByFilters = [
     { id: "popularity.desc", name: "Popularity" },
@@ -32,7 +27,6 @@ const Filters = ({ filtersHandler }) => {
     }
     return yearsArr;
   };
-
   return (
     <div className="d-flex flex-column col-2 border">
       <h5 className="pt-4">Sort Results By</h5>
@@ -40,28 +34,28 @@ const Filters = ({ filtersHandler }) => {
         data={sortByFilters}
         handler={(value) => {
           dispatch(updateFilters({ filter: "sort_by", value }));
-          filtersHandler("sort_by", value);
         }}
+        selected={filters.sort_by}
       />
 
       <h5 className="pt-4">Genres</h5>
       <Select
         data={genreList}
         handler={(value) => {
-          filtersHandler("with_genres", value);
           dispatch(updateFilters({ filter: "with_genres", value }));
         }}
         defaultOption={{ id: "all", name: "All genres" }}
+        selected={filters.with_genres}
       />
 
       <h5 className="pt-4">Release year</h5>
       <Select
         data={createYearSelect(75)}
         handler={(value) => {
-          filtersHandler("primary_release_year", value);
           dispatch(updateFilters({ filter: "primary_release_year", value }));
         }}
         defaultOption={{ id: "all", name: "All years" }}
+        selected={filters.primary_release_year}
       />
     </div>
   );

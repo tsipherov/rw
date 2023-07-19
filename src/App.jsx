@@ -6,31 +6,33 @@ import Auth from "./pages/Auth/Auth";
 import FavoritesPage from "./pages/FavoritesPage/FavoritesPage";
 import WatchPage from "./pages/WatchPage/WatchPage";
 import { UserProvider } from "./contexts/userContext";
-import "./App.css";
 import SingleMoviePage from "./pages/SingleMoviePage/SingleMoviePage";
 import SearchPage from "./pages/SearchPage/SearchPage";
-import { Provider } from "react-redux";
-import { store } from "./store/store";
+import "./App.css";
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <UserProvider>
-        <BrowserRouter>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Navigate to="/movies/1" />} />
-            <Route path="/movies/:page" element={<HomePage />} />
-            <Route path="/movie/:movie_id" element={<SingleMoviePage />} />
-            <Route path="login" element={<Auth />} />
-            <Route path="register" element={<Auth />} />
-            <Route path="/favorites/:page?" element={<FavoritesPage />} />
-            <Route path="watch/:page?" element={<WatchPage />} />
-            <Route path="/search/:page?" element={<SearchPage />} />
-          </Routes>
-        </BrowserRouter>
-      </UserProvider>
-    </Provider>
+    <UserProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route
+            path="/"
+            element={<Navigate to="/movies/1" />}
+            action={async () => {
+              console.log("Hello from router");
+            }}
+          />
+          <Route path="/movies/:page" element={<HomePage />} />
+          <Route path="/movie/:movie_id" element={<SingleMoviePage />} />
+          <Route path="login" element={<Auth />} />
+          <Route path="register" element={<Auth />} />
+          <Route path="/favorites/:page?" element={<FavoritesPage />} />
+          <Route path="watch/:page?" element={<WatchPage />} />
+          <Route path="/search/:page?" element={<SearchPage />} />
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
   );
 };
 

@@ -6,15 +6,24 @@ import ApiService from "../../services/apiService";
 import "./Navbar.css";
 import AccountMenu from "../AccountMenu/AccountMenu";
 import SearchInput from "../UI/SearchInput/SearchInput";
+import { useDispatch } from "react-redux";
+import { resetFilters } from "../../store/slices/filters.slice";
 
 const Navbar = () => {
   const [{ isLogedIn, currentUser }, setCurrentUser] = useContext(UserContext);
   const userData = currentUser;
+  const dispatch = useDispatch();
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-xxl">
-        <Link to="/" className="logo">
+        <Link
+          to="/"
+          className="logo"
+          onClick={() => {
+            dispatch(resetFilters());
+          }}
+        >
           <img
             src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg"
             alt="logo"
@@ -34,7 +43,13 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <NavLink to="/" className="nav-link">
+              <NavLink
+                to="/"
+                className="nav-link"
+                onClick={() => {
+                  dispatch(resetFilters());
+                }}
+              >
                 Home
               </NavLink>
             </li>
