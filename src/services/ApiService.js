@@ -90,7 +90,7 @@ export default class ApiService {
     }
   };
 
-  getGenre = async ({ reqOptions }) => {
+  getGenres = async ({ reqOptions }) => {
     const response = await fetch(
       `${API_URL}/genre/movie/list?language=uk-UK`,
       reqOptions
@@ -194,6 +194,20 @@ export default class ApiService {
     const response = await fetch(
       `${API_URL}/movie/${movie_id}/videos`,
       reqOptions
+    );
+    const result = await response.json();
+    if (!response.ok)
+      throw new Error(
+        `${result.status_message} Status code: ${result.status_code}`
+      );
+    return result;
+  };
+
+  getCollectionDetails = async (collection_id) => {
+    // console.log("addFavorite method serviceProps >>>> ", serviceProps);
+
+    const response = await fetch(
+      `${API_URL}/collection/${collection_id}?api_key=${API_KEY_3}`
     );
     const result = await response.json();
     if (!response.ok)

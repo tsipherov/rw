@@ -1,33 +1,32 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/userContext";
 import MoviesList from "../../components/MovieList/MoviesList";
-import { useFetch } from "../../hooks/useFetch";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchFavoriteMovies } from "../../store/slices/favorites.slice";
 import "./FavoritesPage.css";
 
 const FavoritesPage = () => {
   const [user] = useContext(UserContext);
-  const [movies, setMovies] = useState(null);
   const { page = 1 } = useParams();
-
-  const [{ isLoading, response, error }, createFetchRequest] = useFetch();
+  const { entities: movies, loading } = useSelector((state) => state.favorites);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user.currentUser && !isLoading && !error)
-      createFetchRequest("getFavoriteMovies", [user.currentUser.id, page]);
-    if (!error && response) {
-      setMovies(response);
-    }
-  }, [user, response, page]);
+    dispatch(
+      fetchFavoriteMovies({ serviceProps: [user?.currentUser?.id, page] })
+    );
+  }, [page, user]);
 
   const handlerPagination = (page) => {
     navigate(`/favorites/${page}`);
   };
+  console.log("movies >>>> ", movies);
 
   return (
     <div className="container-xxl">
-      {movies ? (
+      {loading === "succeeded" ? (
         <MoviesList
           handlerPagination={handlerPagination}
           data={movies}

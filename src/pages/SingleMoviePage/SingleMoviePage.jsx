@@ -3,12 +3,15 @@ import { useParams } from "react-router-dom";
 import "./SingleMoviePage.css";
 import { useFetch } from "../../hooks/useFetch";
 import { UserContext } from "../../contexts/userContext";
+import ApiService from "../../services/apiService";
 
 const SingleMoviePage = () => {
   const [movie, setMovie] = useState(null);
   const [stateMovie, setStateMovie] = useState(null);
   const { movie_id } = useParams();
   const [videoLink, setVideoLink] = useState(null);
+
+  const apiService = new ApiService();
 
   const [
     { isLoading: stateIsLoading, response: stateResponse, error: stateError },
@@ -111,6 +114,7 @@ const SingleMoviePage = () => {
               {movie.adult ? <div className="adult">18+</div> : null}
 
               <button
+                title="Add to favorite"
                 className={stateMovie.favorite ? "active" : null}
                 onClick={addToFavoriteHandler}
                 disabled={stateIsLoading && toggleLoad}
@@ -122,6 +126,7 @@ const SingleMoviePage = () => {
                 {/* favor ite */}
               </button>
               <button
+                title="Add to watch list"
                 className={stateMovie.watchlist ? "active" : null}
                 onClick={addToWatchHandler}
                 disabled={stateIsLoading && toggleLoad}
@@ -185,7 +190,16 @@ const SingleMoviePage = () => {
               </li>
               {movie.belongs_to_collection ? (
                 <li key="belongs_to_collection">
-                  <span className="singleMovieDetailName">
+                  <span
+                    className="singleMovieDetailName"
+                    onClick={() => {
+                      apiService
+                        .getCollectionDetails(movie.belongs_to_collection.id)
+                        .then((res) =>
+                          console.log("belongs_to_collection >>>>> ", res)
+                        );
+                    }}
+                  >
                     belongs to collection
                   </span>
                   {movie.belongs_to_collection.name}

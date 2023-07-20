@@ -1,22 +1,28 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createFetchOptions } from "../../utils/createFetchOptions";
+import ApiService from "../../services/apiService";
 
-const API_KEY_4 = process.env.REACT_APP_API_KEY_4;
 const API_URL = "https://api.themoviedb.org/3";
+// const apiService = new ApiService();
 
 export const fetchGenres = createAsyncThunk(
   "@@genres/fetchGenres",
-  async () => {
-    const response = await fetch(`${API_URL}/genre/movie/list?language=uk-UK`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        Authorization: `Bearer ${API_KEY_4}`,
-      },
-    });
-    const data = await response.json();
-    return data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `${API_URL}/genre/movie/list?language=uk-UK`,
+        createFetchOptions()
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(
+          `${data.status_message} Status code: ${data.status_code}`
+        );
+      }
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -25,24 +31,24 @@ const genresSlice = createSlice({
   initialState: {
     entities: [],
     error: null,
-    loading: "idle",
+    loading: "idle", //loading: 'idle' | 'pending' | 'succeeded' | 'failed'
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchGenres.pending, (state, action) => {
-        state.loading = true;
+      .addCase(fetchGenres.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
       })
       .addCase(fetchGenres.rejected, (state, action) => {
-        state.loading = false;
+        state.loading = "failed";
         state.error = action.payload;
       })
       .addCase(fetchGenres.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading = "succeeded";
         state.entities = action.payload.genres;
       });
   },
 });
 
-export const { setGenres } = genresSlice.actions;
 export const genresReducer = genresSlice.reducer;
