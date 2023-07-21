@@ -3,9 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../contexts/userContext";
 import { useFetch } from "../../hooks/useFetch";
 import MoviesList from "../../components/MovieList/MoviesList";
+import { useSelector } from "react-redux";
 
 const WatchPage = () => {
-  const [user] = useContext(UserContext);
+  const user = useSelector((state) => state.auth.user);
   const [movies, setMovies] = useState(null);
   const { page = 1 } = useParams();
 
@@ -13,8 +14,8 @@ const WatchPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user.currentUser && !isLoading && !error)
-      createFetchRequest("getWatchlistMovies", [user.currentUser.id, page]);
+    if (user && !isLoading && !error)
+      createFetchRequest("getWatchlistMovies", [user.id, page]);
     if (!error && response) {
       setMovies(response);
     }

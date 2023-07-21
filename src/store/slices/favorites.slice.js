@@ -1,24 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createFetchOptions } from "../../utils/createFetchOptions";
-
-const API_URL = "https://api.themoviedb.org/3";
 
 export const fetchFavoriteMovies = createAsyncThunk(
   "@@favorites/fetchFavoriteMovies",
-  async ({ serviceProps }, { rejectWithValue }) => {
+  async (props, { rejectWithValue, extra }) => {
     try {
-      const [account_id, page] = serviceProps;
-      const response = await fetch(
-        `${API_URL}/account/${account_id}/favorite/movies?page=${page}&language=uk-UA`,
-        createFetchOptions()
-      );
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(
-          `${result.status_message} Status code: ${result.status_code}`
-        );
-      }
-      return result;
+      return extra.getFavoriteMovies(props);
     } catch (error) {
       return rejectWithValue(error.message);
     }

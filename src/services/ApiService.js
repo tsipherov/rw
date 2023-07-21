@@ -4,7 +4,7 @@ const API_KEY_3 = process.env.REACT_APP_API_KEY_3;
 
 const API_KEY_4 = process.env.REACT_APP_API_KEY_4;
 
-const createFetchOptions = (bodyData = null, httpMethod = "GET") => {
+const createFetchOptions = ({ bodyData = null, httpMethod = "GET" } = {}) => {
   const requestOptions = {
     method: httpMethod,
     mode: "cors",
@@ -23,48 +23,56 @@ const createFetchOptions = (bodyData = null, httpMethod = "GET") => {
   return requestOptions;
 };
 
+export const getAuthToken = async () => {
+  const response = await fetch(
+    `${API_URL}/authentication/token/new`,
+    createFetchOptions()
+  );
+  const data = await response.json();
+  if (!response.ok)
+    throw new Error(`Failed to get token. Response status: ${response.status}`);
+  return data;
+};
+
+export const validateLogin = async (reqOptions) => {
+  const response = await fetch(
+    `${API_URL}/authentication/token/validate_with_login`,
+    createFetchOptions(reqOptions)
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(`${data.status_message} Status code: ${data.status_code}`);
+  }
+  const result = { validateLogin: data.success };
+  return result;
+};
+
+export const createSession = async (reqOptions) => {
+  const response = await fetch(
+    `${API_URL}/authentication/session/new`,
+    createFetchOptions(reqOptions)
+  );
+  if (!response.ok)
+    throw new Error(
+      `Failed to create session. Response status: ${response.status}`
+    );
+  const result = await response.json();
+  return result;
+};
+
+export const getAccountDetails = async (session_id) => {
+  const response = await fetch(
+    `${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`
+  );
+  const result = await response.json();
+  return result;
+};
+
+// ###############################################
+
+// ###############################################
+
 export default class ApiService {
-  getAuthentication = async ({ reqOptions }) => {
-    const response = await fetch(
-      `${API_URL}/authentication/token/new`,
-      reqOptions
-    );
-    if (!response.ok)
-      throw new Error(
-        `Failed to get token. Response status: ${response.status}`
-      );
-    const data = await response.json();
-    return data;
-  };
-
-  validateLogin = async ({ reqOptions }) => {
-    const response = await fetch(
-      `${API_URL}/authentication/token/validate_with_login`,
-      reqOptions
-    );
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(
-        `${data.status_message} Status code: ${data.status_code}`
-      );
-    }
-    const result = { validateLogin: data.success };
-    return result;
-  };
-
-  createSession = async ({ reqOptions }) => {
-    const response = await fetch(
-      `${API_URL}/authentication/session/new`,
-      reqOptions
-    );
-    if (!response.ok)
-      throw new Error(
-        `Failed to create session. Response status: ${response.status}`
-      );
-    const result = await response.json();
-    return result;
-  };
-
   deleteSession = async ({ reqOptions }) => {
     const response = await fetch(
       `${API_URL}/authentication/session`,
@@ -77,14 +85,6 @@ export default class ApiService {
       );
     }
     return data;
-  };
-
-  getAccountDetails = async (session_id) => {
-    const response = await fetch(
-      `${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`
-    );
-    const result = await response.json();
-    return result;
   };
 
   getMovies = async ({ serviceProps, reqOptions }) => {
@@ -120,16 +120,6 @@ export default class ApiService {
       throw new Error(
         `${result.status_message} Status code: ${result.status_code}`
       );
-    return result;
-  };
-
-  getFavoriteMovies = async ({ serviceProps, reqOptions }) => {
-    const [account_id, page] = serviceProps;
-    const response = await fetch(
-      `${API_URL}/account/${account_id}/favorite/movies?page=${page}&language=uk-UA`,
-      reqOptions
-    );
-    const result = await response.json();
     return result;
   };
 
@@ -232,4 +222,19 @@ export const getGenres = async () => {
     throw new Error(`${data.status_message} Status code: ${data.status_code}`);
   }
   return data;
+};
+
+export const getFavoriteMovies = async ({ serviceProps }) => {
+  const [account_id, page] = serviceProps;
+  const response = await fetch(
+    `${API_URL}/account/${account_id}/favorite/movies?page=${page}&language=uk-UA`,
+    createFetchOptions()
+  );
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(
+      `${result.status_message} Status code: ${result.status_code}`
+    );
+  }
+  return result;
 };

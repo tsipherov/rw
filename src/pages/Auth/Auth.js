@@ -3,78 +3,57 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
 import BackendErrorMessage from "../../components/BackendErrorMessage/BackendErrorMessage";
 import { useLocalStorage } from "../../hooks/useLocalStogage";
-import "./main.css";
 import { UserContext } from "../../contexts/userContext";
-import { authSessionId, authUser } from "../../store/actions/auth.actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSession, fetchUser } from "../../store/slices/auth.slice";
+import "./main.css";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [isSaccessSubmit, setIsSaccessSubmit] = useState(false);
-  const [currentUser, setCurrentUser, getUserDetails] = useContext(UserContext);
-  const [token, setToken] = useState(null);
 
+  // const [{ isLoading, response, error }, createFetchRequest] = useFetch();
+  const [currentUser, setCurrentUser] = useContext(UserContext);
+  const { isAuthorize, user, session_id, error, loading } = useSelector(
+    (state) => state.auth
+  );
+
+  const [sessionId, setSessionId] = useLocalStorage("session_id");
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const isLogin = pathname === "/login";
   const pageTitle = isLogin ? "Sign In" : "Sign Up";
   const descriptionLink = isLogin ? "/register" : "/login";
   const descriptionText = isLogin ? "Need an account?" : "Have an account?";
-  const [sessionId, setSessionId] = useLocalStorage("session_id");
 
-  const [{ isLoading, response, error }, createFetchRequest] = useFetch();
-  const dispatch = useDispatch();
   useEffect(() => {
-    if (!isLoading && !response && !error)
-      createFetchRequest("getAuthentication");
-    if (response?.request_token) {
-      setToken(response.request_token);
-    }
-    if (!error && response?.validateLogin) {
-      createFetchRequest(
-        "createSession",
-        [],
-        {
-          request_token: token,
-        },
-        "POST"
-      );
-    }
-    if (response?.session_id) {
-      dispatch(authSessionId(response.session_id));
-      setSessionId(response.session_id);
-    }
-    if (sessionId) {
-      getUserDetails(sessionId).then((user) => dispatch(authUser(user)));
-      navigate("/");
+    if (isAuthorize) {
+      setSessionId(session_id);
+      dispatch(fetchUser(session_id));
+      if (user) {
+        setCurrentUser(user);
+        navigate("/");
+      }
+      // getUserDetails(session_id).then((user) => dispatch(authUser(user)));
     }
     // eslint-disable-next-line
-  }, [response, error, isLoading]);
+  }, [isAuthorize, user]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-
     // const user = isLogin ? { email, password } : { username, email, password };
-
-    createFetchRequest(
-      "validateLogin",
-      [],
-      {
+    dispatch(
+      fetchSession({
         username: "tsipherov",
         password: "ih5jA5qCykHM.x8",
         // username,
         // password,
-        request_token: token,
-      },
-      "POST"
+      })
     );
   };
-
-  if (isSaccessSubmit) {
-  }
 
   return (
     <div className="auth-page">
@@ -130,7 +109,7 @@ const Auth = () => {
                 <button
                   className="btn btn-lg btn-primary pull-xs-right"
                   type="submit"
-                  disabled={isLoading}
+                  disabled={loading === "pending"}
                 >
                   {pageTitle}
                 </button>

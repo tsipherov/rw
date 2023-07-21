@@ -6,11 +6,12 @@ import ApiService from "../../services/apiService";
 import "./Navbar.css";
 import AccountMenu from "../AccountMenu/AccountMenu";
 import SearchInput from "../UI/SearchInput/SearchInput";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { resetFilters } from "../../store/slices/filters.slice";
 
 const Navbar = () => {
-  const [{ isLogedIn, currentUser }, setCurrentUser] = useContext(UserContext);
+  const { isAuthorize, user } = useSelector((state) => state.auth);
+  const [{ currentUser }, setCurrentUser] = useContext(UserContext);
   const userData = currentUser;
   const dispatch = useDispatch();
 
@@ -53,7 +54,7 @@ const Navbar = () => {
                 Home
               </NavLink>
             </li>
-            {isLogedIn ? (
+            {user ? (
               <>
                 <li className="nav-item">
                   <NavLink to="/favorites" className="nav-link">
@@ -67,10 +68,10 @@ const Navbar = () => {
                 </li>
                 <li className="nav-item avatar">
                   <img
-                    src={`https://secure.gravatar.com/avatar/${userData?.avatar?.gravatar.hash}?s=32`}
+                    src={`https://secure.gravatar.com/avatar/${user.avatar.gravatar.hash}?s=32`}
                     alt="account avatar"
                   />
-                  <span>{userData?.username}</span>
+                  <span>{user.username}</span>
                   <AccountMenu />
                 </li>
               </>
