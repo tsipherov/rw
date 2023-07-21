@@ -1,25 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createFetchOptions } from "../../utils/createFetchOptions";
-import ApiService from "../../services/apiService";
-
-const API_URL = "https://api.themoviedb.org/3";
-// const apiService = new ApiService();
 
 export const fetchGenres = createAsyncThunk(
   "@@genres/fetchGenres",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, extra }) => {
     try {
-      const response = await fetch(
-        `${API_URL}/genre/movie/list?language=uk-UK`,
-        createFetchOptions()
-      );
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(
-          `${data.status_message} Status code: ${data.status_code}`
-        );
-      }
-      return data;
+      return extra.getGenres();
     } catch (error) {
       return rejectWithValue(error.message);
     }

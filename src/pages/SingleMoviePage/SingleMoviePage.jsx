@@ -119,11 +119,7 @@ const SingleMoviePage = () => {
                 onClick={addToFavoriteHandler}
                 disabled={stateIsLoading && toggleLoad}
               >
-                <i
-                  className="bi bi-heart"
-                  // style="font-size: 2rem; color: cornflowerblue;"
-                ></i>
-                {/* favor ite */}
+                <i className="bi bi-heart" />
               </button>
               <button
                 title="Add to watch list"
@@ -131,8 +127,7 @@ const SingleMoviePage = () => {
                 onClick={addToWatchHandler}
                 disabled={stateIsLoading && toggleLoad}
               >
-                <i class="bi bi-bookmark-plus"></i>
-                {/* watch */}
+                <i className="bi bi-bookmark-plus" />
               </button>
             </div>
             <h3>{movie.original_title}</h3>
@@ -230,7 +225,7 @@ const SingleMoviePage = () => {
               title="YouTube video player"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              fullscreen
+              allowfullscreen
             ></iframe>
           ) : null}
         </div>

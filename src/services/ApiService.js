@@ -2,7 +2,26 @@ const API_URL = "https://api.themoviedb.org/3";
 
 const API_KEY_3 = process.env.REACT_APP_API_KEY_3;
 
-// const API_KEY_4 = process.env.REACT_APP_API_KEY_4;
+const API_KEY_4 = process.env.REACT_APP_API_KEY_4;
+
+const createFetchOptions = (bodyData = null, httpMethod = "GET") => {
+  const requestOptions = {
+    method: httpMethod,
+    mode: "cors",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+      Authorization: `Bearer ${API_KEY_4}`,
+    },
+  };
+
+  if (bodyData) {
+    requestOptions.body = JSON.stringify({
+      ...bodyData,
+    });
+  }
+  return requestOptions;
+};
 
 export default class ApiService {
   getAuthentication = async ({ reqOptions }) => {
@@ -78,21 +97,6 @@ export default class ApiService {
       .join("");
     const response = await fetch(
       `${API_URL}/discover/movie?page=${page}${searchParams}&language=uk-UA`,
-      reqOptions
-    );
-    const data = await response.json();
-    if (response.ok) {
-      return data;
-    } else {
-      throw new Error(
-        `${data.status_message} Status code: ${data.status_code}`
-      );
-    }
-  };
-
-  getGenres = async ({ reqOptions }) => {
-    const response = await fetch(
-      `${API_URL}/genre/movie/list?language=uk-UK`,
       reqOptions
     );
     const data = await response.json();
@@ -217,3 +221,15 @@ export default class ApiService {
     return result;
   };
 }
+
+export const getGenres = async () => {
+  const response = await fetch(
+    `${API_URL}/genre/movie/list?language=uk-UK`,
+    createFetchOptions()
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(`${data.status_message} Status code: ${data.status_code}`);
+  }
+  return data;
+};
