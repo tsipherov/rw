@@ -52,7 +52,7 @@ export const useFetch = () => {
   useEffect(() => {
     // console.log(`>>>>>  start ${service} method  >>>`);
     // console.log("reqOptions: ", reqOptions);
-    console.log("serviceMethodProps: ", serviceProps);
+    // console.log("serviceMethodProps: ", serviceProps);
 
     if (!isLoading) return;
     apiServices[service]({ serviceProps, reqOptions })

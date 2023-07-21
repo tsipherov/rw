@@ -44,25 +44,14 @@ const authSlice = createSlice({
     setToken(state, action) {
       state.token = action.payload;
     },
-    // authUser(store, action) {
-    //   store.user = action.payload;
-    // },
   },
   extraReducers: (builder) => {
     builder
-      //   .addCase(fetchSession.pending, (state) => {
-      //     state.loading = "pending";
-      //     state.error = null;
-      //   })
       .addCase(fetchSession.fulfilled, (state, action) => {
         state.loading = "succeeded";
         state.session_id = action.payload.session_id;
         state.isAuthorize = true;
       })
-      //   .addCase(fetchSession.rejected, (state, action) => {
-      //     state.loading = "failed";
-      //     state.error = action.payload;
-      //   })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.loading = "succeeded";
         state.user = action.payload;

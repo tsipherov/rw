@@ -1,25 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { UserContext } from "../../contexts/userContext";
-import { useFetch } from "../../hooks/useFetch";
 import MoviesList from "../../components/MovieList/MoviesList";
-import { useSelector } from "react-redux";
+import { fetchWatchList } from "../../store/slices/watch.slice";
 
 const WatchPage = () => {
   const user = useSelector((state) => state.auth.user);
-  const [movies, setMovies] = useState(null);
+  const { entities: movies, loading } = useSelector((state) => state.watchList);
   const { page = 1 } = useParams();
-
-  const [{ isLoading, response, error }, createFetchRequest] = useFetch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user && !isLoading && !error)
-      createFetchRequest("getWatchlistMovies", [user.id, page]);
-    if (!error && response) {
-      setMovies(response);
-    }
-  }, [user, response, page]);
+    if (user) dispatch(fetchWatchList([user.id, page]));
+  }, [user, page]);
 
   const handlerPagination = (page) => {
     navigate(`/watch/${page}`);
@@ -27,7 +21,7 @@ const WatchPage = () => {
 
   return (
     <div className="container-xxl">
-      {movies ? (
+      {loading === "succeeded" ? (
         <MoviesList
           handlerPagination={handlerPagination}
           data={movies}

@@ -68,6 +68,18 @@ export const getAccountDetails = async (session_id) => {
   return result;
 };
 
+export const getWatchlistMovies = async (serviceProps) => {
+  const [account_id, page] = serviceProps;
+  const response = await fetch(
+    `${API_URL}/account/${account_id}/watchlist/movies?page=${page}&language=uk-UA`,
+    createFetchOptions()
+  );
+  const data = await response.json();
+  if (!response.ok)
+    throw new Error(`${data.status_message} Status code: ${data.status_code}`);
+  return data;
+};
+
 // ###############################################
 
 // ###############################################
@@ -129,16 +141,6 @@ export default class ApiService {
     const [account_id] = serviceProps;
     const response = await fetch(
       `${API_URL}/account/${account_id}/favorite`,
-      reqOptions
-    );
-    const result = await response.json();
-    return result;
-  };
-
-  getWatchlistMovies = async ({ serviceProps, reqOptions }) => {
-    const [account_id, page] = serviceProps;
-    const response = await fetch(
-      `${API_URL}/account/${account_id}/watchlist/movies?page=${page}&language=uk-UA`,
       reqOptions
     );
     const result = await response.json();

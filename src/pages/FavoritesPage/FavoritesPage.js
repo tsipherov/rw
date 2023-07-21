@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import MoviesList from "../../components/MovieList/MoviesList";
-import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import MoviesList from "../../components/MovieList/MoviesList";
 import { fetchFavoriteMovies } from "../../store/slices/favorites.slice";
 import "./FavoritesPage.css";
 
