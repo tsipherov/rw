@@ -23,7 +23,7 @@ const App = () => {
 
   return (
     <UserProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="rw">
         <Navbar />
         <Routes>
           <Route
