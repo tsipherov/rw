@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createEntityAdapter,
+  createSlice,
+} from "@reduxjs/toolkit";
 
 export const fetchWatchList = createAsyncThunk(
   "@@watchList/fetchWatchList",
@@ -11,13 +15,23 @@ export const fetchWatchList = createAsyncThunk(
   }
 );
 
+const watchListAdapter = createEntityAdapter({
+  selectId: (movie) => movie.id,
+});
+
 const watchSlice = createSlice({
   name: "@@watchList",
-  initialState: {
+  initialState: watchListAdapter.getInitialState({
     loading: "idle",
-    entities: {},
     error: null,
-  },
+    total_pages: 0,
+  }),
+
+  // {
+  //   loading: "idle",
+  //   entities: {},
+  //   error: null,
+  // },
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -27,7 +41,8 @@ const watchSlice = createSlice({
       })
       .addCase(fetchWatchList.fulfilled, (state, action) => {
         state.loading = "succeeded";
-        state.entities = action.payload;
+        state.total_pages = action.payload.total_pages;
+        watchListAdapter.addMany(state, action.payload.results);
       })
       .addCase(fetchWatchList.rejected, (state, action) => {
         state.loading = "failed";
@@ -35,5 +50,9 @@ const watchSlice = createSlice({
       });
   },
 });
+
+export const watchListSelectors = watchListAdapter.getSelectors(
+  (state) => state.watchList
+);
 
 export const watchListReducer = watchSlice.reducer;

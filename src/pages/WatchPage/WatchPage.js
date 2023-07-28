@@ -2,11 +2,15 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import MoviesList from "../../components/MovieList/MoviesList";
-import { fetchWatchList } from "../../store/slices/watch.slice";
+import {
+  fetchWatchList,
+  watchListSelectors,
+} from "../../store/slices/watch.slice";
 
 const WatchPage = () => {
   const user = useSelector((state) => state.auth.user);
-  const { entities: movies, loading } = useSelector((state) => state.watchList);
+  const { loading, total_pages } = useSelector((state) => state.watchList);
+  const movies = useSelector(watchListSelectors.selectAll);
   const { page = 1 } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,7 +28,7 @@ const WatchPage = () => {
       {loading === "succeeded" ? (
         <MoviesList
           handlerPagination={handlerPagination}
-          data={movies}
+          data={{ results: movies, total_pages }}
           page={+page}
         />
       ) : null}

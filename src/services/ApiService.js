@@ -80,6 +80,33 @@ export const getWatchlistMovies = async (serviceProps) => {
   return data;
 };
 
+export const getGenres = async () => {
+  const response = await fetch(
+    `${API_URL}/genre/movie/list?language=uk-UK`,
+    createFetchOptions()
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(`${data.status_message} Status code: ${data.status_code}`);
+  }
+  return data;
+};
+
+export const getFavoriteMovies = async ({ serviceProps }) => {
+  const [account_id, page] = serviceProps;
+  const response = await fetch(
+    `${API_URL}/account/${account_id}/favorite/movies?page=${page}&language=uk-UA`,
+    createFetchOptions()
+  );
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(
+      `${result.status_message} Status code: ${result.status_code}`
+    );
+  }
+  return result;
+};
+
 // ###############################################
 
 // ###############################################
@@ -100,17 +127,16 @@ export default class ApiService {
   };
 
   getMovies = async ({ serviceProps, reqOptions }) => {
-    console.log("getMovies serviceProps  >>> ", serviceProps);
     const [filters, page] = serviceProps;
-    const searchParams = Object.keys(filters)
-      .map((filter) => {
-        if (filters[filter] !== "all") return `&${filter}=${filters[filter]}`;
-      })
-      .join("");
-    const response = await fetch(
-      `${API_URL}/discover/movie?page=${page}${searchParams}&language=uk-UA`,
-      reqOptions
-    );
+    const url = new URL(`${API_URL}/discover/movie?language=uk-UA`);
+
+    url.searchParams.append("page", page);
+    Object.keys(filters).forEach((filter) => {
+      if (filters[filter] !== "all")
+        url.searchParams.append(filter, filters[filter]);
+    });
+
+    const response = await fetch(url, reqOptions);
     const data = await response.json();
     if (response.ok) {
       return data;
@@ -213,30 +239,3 @@ export default class ApiService {
     return result;
   };
 }
-
-export const getGenres = async () => {
-  const response = await fetch(
-    `${API_URL}/genre/movie/list?language=uk-UK`,
-    createFetchOptions()
-  );
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(`${data.status_message} Status code: ${data.status_code}`);
-  }
-  return data;
-};
-
-export const getFavoriteMovies = async ({ serviceProps }) => {
-  const [account_id, page] = serviceProps;
-  const response = await fetch(
-    `${API_URL}/account/${account_id}/favorite/movies?page=${page}&language=uk-UA`,
-    createFetchOptions()
-  );
-  const result = await response.json();
-  if (!response.ok) {
-    throw new Error(
-      `${result.status_message} Status code: ${result.status_code}`
-    );
-  }
-  return result;
-};
