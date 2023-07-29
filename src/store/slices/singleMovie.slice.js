@@ -22,6 +22,17 @@ export const fetchStateSingleMovie = createAsyncThunk(
   }
 );
 
+export const fetchSingleMovieCollection = createAsyncThunk(
+  "@@singleMovie/fetchSingleMovieCollection",
+  async (collection_id, { extra, rejectWithValue }) => {
+    try {
+      return extra.getCollectionDetails(collection_id);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const fetchTrailer = createAsyncThunk(
   "@@singleMovie/fetchTrailer",
   async (movie_id, { extra, rejectWithValue }) => {
@@ -64,20 +75,23 @@ const initialState = {
   movie: null,
   stateMovie: null,
   videoLink: null,
+  collection: null,
 };
 
 const singleMovieSlice = createSlice({
   name: "@@singleMovie",
   initialState,
   reducers: {
-    setDefaultState(state) {
-      state = initialState;
+    // setDefaultState(state) {
+    //   state = initialState;
+    // },
+    setDefaultCollection(state) {
+      state.collection = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchSingleMovie.pending, (state) => {
-        // state = initialState;
         state.movieLoading = "pending";
       })
       .addCase(fetchSingleMovie.fulfilled, (state, action) => {
@@ -91,6 +105,10 @@ const singleMovieSlice = createSlice({
       .addCase(fetchTrailer.fulfilled, (state, action) => {
         state.loading = "succeeded";
         state.videoLink = action.payload;
+      })
+      .addCase(fetchSingleMovieCollection.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.collection = action.payload;
       })
       .addMatcher(
         (action) =>
@@ -113,6 +131,6 @@ const singleMovieSlice = createSlice({
   },
 });
 
-export const { setDefaultState } = singleMovieSlice.actions;
+export const { setDefaultCollection } = singleMovieSlice.actions;
 
 export const singleMovieReducer = singleMovieSlice.reducer;

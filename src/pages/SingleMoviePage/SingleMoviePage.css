@@ -1,19 +1,18 @@
 .singleMoviePage {
     display: grid;
+    grid-template-columns: 40% 60%;
     gap: 1rem;
     grid-template-areas: 'poster header'
         'poster details'
         'description description'
+        'collection collection'
         'video video';
     padding: 2rem;
 }
 
-iframe {
-    grid-area: video;
-    margin: 0 auto;
+.singleMoviePage a {
+    text-decoration: none;
 }
-
-
 
 .singleMovieTitle {
     grid-area: header;
@@ -24,12 +23,15 @@ iframe {
 
 .singleMoviePoster {
     grid-area: poster;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 2/3;
+    object-fit: cover;
 }
 
 .singleMovieDetails {
     grid-area: details;
-    width: 700px;
+    width: 100%;
 }
 
 .singleMovieButtonsBlock {
@@ -73,10 +75,6 @@ iframe {
     background-color: var(--main-clr);
 }
 
-/* .singleMovieButtonsBlock button:disabled {
-    background-color: #7e7e7e;
-} */
-
 .singleMovieOriginalTitle {
     color: var(--main-clr);
 }
@@ -91,11 +89,6 @@ iframe {
     font-weight: bold;
     min-width: 200px;
     margin-left: 10px;
-}
-
-.singleMovieProdCompany {
-    padding-right: 35px;
-    display: inline-block;
 }
 
 .singleMovieDetails ul {
@@ -118,21 +111,50 @@ iframe {
 .singleMovieCompanyLogo {
     max-height: 30px;
     max-width: 150px;
-
     padding-right: 25px;
-    /* padding-top: 10px; */
 }
 
 .singleMovieProdCountry {
     padding-right: 10px;
 }
 
-.singleMovieGenres {
-    padding: 0 5px;
+.detailContainer span,
+.detailContainer a {
+    display: inline-block;
+    padding-right: 20px;
 }
 
 .bi .bi-bookmark-plus-fill {
-    /* font-size: 1rem; */
     color: var(--main-clr);
     font-weight: bold;
+}
+
+.singleMovieCollection {
+    grid-area: collection;
+    text-align: center;
+}
+
+.singleMovieCollection .collectionCardsContainer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 25px;
+}
+
+.collectionCardsContainer .collectionCard {
+    color: rgb(167, 167, 167);
+    max-width: 130px;
+    margin: 0 25px;
+}
+
+.collectionCard h5 {
+    font-size: 1rem;
+}
+
+.singleMoviePage iframe {
+    width: 100%;
+    margin: 2rem auto;
+    grid-area: video;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
 }

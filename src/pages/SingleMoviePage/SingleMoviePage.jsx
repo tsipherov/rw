@@ -1,37 +1,41 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import ApiService from "../../services/apiService";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchSingleMovie,
+  fetchSingleMovieCollection,
   fetchStateSingleMovie,
   fetchTrailer,
-  setDefaultState,
+  setDefaultCollection,
   toggleStateMovie,
 } from "../../store/slices/singleMovie.slice";
 import "./SingleMoviePage.css";
+import { updateFilters } from "../../store/slices/filters.slice";
 
 const SingleMoviePage = () => {
   const { movie_id } = useParams();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const { movieLoading, movie, stateMovie, loading, videoLink } = useSelector(
-    (state) => state.singleMovie
-  );
+  const { movieLoading, movie, stateMovie, collection, loading, videoLink } =
+    useSelector((state) => state.singleMovie);
 
   const apiService = new ApiService();
 
   useEffect(() => {
-    console.log("Single Movie Page useEffect works!!!!");
-    // dispatch(setDefaultState());
     dispatch(fetchSingleMovie(movie_id));
     dispatch(fetchStateSingleMovie(movie_id));
     dispatch(fetchTrailer(movie_id));
-  }, []);
+    // eslint-disable-next-line
+  }, [movie_id]);
 
-  // useEffect(() => {
-  //   console.log("Single Movie Page getVideo works!!!!");
-  // }, [stateMovie]);
+  useEffect(() => {
+    if (movie && movie.belongs_to_collection) {
+      dispatch(fetchSingleMovieCollection(movie.belongs_to_collection.id));
+    } else {
+      dispatch(setDefaultCollection());
+    }
+  }, [movie]);
 
   const toggleStateMovieHandler = (prop) => {
     const reqOptions = {
@@ -48,7 +52,7 @@ const SingleMoviePage = () => {
 
   let content =
     movieLoading === "succeeded" ? (
-      <div className="container">
+      <div className="pageContainer">
         <div className="singleMoviePage">
           <h2 className="singleMovieTitle">{movie.title}</h2>
           <img
@@ -94,7 +98,8 @@ const SingleMoviePage = () => {
                     <img
                       key={m.id}
                       className="singleMovieCompanyLogo"
-                      src={`https://image.tmdb.org/t/p/w500${m.logo_path}`}
+                      src={`https://image.tmdb.org/t/p/w154${m.logo_path}`}
+                      alt={m}
                     />
                   ) : null
                 )}
@@ -107,11 +112,9 @@ const SingleMoviePage = () => {
                 <span className="singleMovieDetailName">
                   production companies
                 </span>
-                <div className="singleMovieProdCompanies">
+                <div className="detailContainer">
                   {movie.production_companies.map((m) => (
-                    <span key={m.id} className="singleMovieProdCompany">
-                      &laquo;{m.name}&raquo;
-                    </span>
+                    <span key={m.id}>&laquo;{m.name}&raquo;</span>
                   ))}
                 </div>
               </li>
@@ -120,42 +123,36 @@ const SingleMoviePage = () => {
                 <span className="singleMovieDetailName">
                   production countries
                 </span>
-                {movie.production_countries.map((m) => (
-                  <span key={m.iso_3166_1} className="singleMovieProdCountry">
-                    {m.name}
-                  </span>
-                ))}
+                <div className="detailContainer">
+                  {movie.production_countries.map((m) => (
+                    <span key={m.iso_3166_1} className="singleMovieProdCountry">
+                      {m.name}
+                    </span>
+                  ))}
+                </div>
               </li>
               <li key="genres">
                 <span className="singleMovieDetailName">genres</span>
-                {movie.genres.map((m) => (
-                  <span className="singleMovieGenres" key={m.id}>
-                    {m.name}
-                  </span>
-                ))}
+                <div className="detailContainer">
+                  {movie.genres.map((m) => (
+                    <Link
+                      to={`/`}
+                      onClick={() => {
+                        dispatch(
+                          updateFilters({ filter: "with_genres", value: m.id })
+                        );
+                      }}
+                      key={m.id}
+                    >
+                      {m.name}
+                    </Link>
+                  ))}
+                </div>
               </li>
               <li key="runtime">
                 <span className="singleMovieDetailName">runtime</span>
                 {movie.runtime} min
               </li>
-              {movie.belongs_to_collection ? (
-                <li key="belongs_to_collection">
-                  <span
-                    className="singleMovieDetailName"
-                    onClick={() => {
-                      apiService
-                        .getCollectionDetails(movie.belongs_to_collection.id)
-                        .then((res) =>
-                          console.log("belongs_to_collection >>>>> ", res)
-                        );
-                    }}
-                  >
-                    belongs to collection
-                  </span>
-                  {movie.belongs_to_collection.name}
-                </li>
-              ) : null}
-
               <li key="revenue">
                 <span className="singleMovieDetailName">budget / revenue</span>$
                 {movie.budget.toLocaleString("ua-UA")} / $
@@ -171,14 +168,35 @@ const SingleMoviePage = () => {
               </li>
             </ul>
           </div>
+
+          {collection ? (
+            <div className="singleMovieCollection">
+              <h3 className="singleMovieDetailName">{collection.name}</h3>
+              <p>{collection.overview}</p>
+              <div className="collectionCardsContainer">
+                {collection.parts.map((part) => (
+                  <Link to={`/movie/${part.id}`} className="collectionCard">
+                    <img
+                      // className="singleMoviePoster"
+                      src={`https://image.tmdb.org/t/p/w92${
+                        part.poster_path || part.backdrop_path
+                      }`}
+                      alt={part.original_title}
+                    />
+                    <h5>{part.title}</h5>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
           <div className="singleMovieDescription">{movie.overview}</div>
           {videoLink ? (
             <iframe
-              width="1080"
-              height="607"
+              // width="1080"
+              // height="607"
               src={`https://www.youtube.com/embed/${videoLink}`}
               title="YouTube video player"
-              // frameborder="5"
+              // frameborder="0"
               // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             ></iframe>

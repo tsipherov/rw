@@ -4,6 +4,8 @@ const API_KEY_3 = process.env.REACT_APP_API_KEY_3;
 
 const API_KEY_4 = process.env.REACT_APP_API_KEY_4;
 
+const language = "uk-UA";
+
 const createFetchOptions = ({ bodyData = null, httpMethod = "GET" } = {}) => {
   const requestOptions = {
     method: httpMethod,
@@ -82,8 +84,9 @@ export const getAccountDetails = async (session_id) => {
 
 export const getWatchlistMovies = async (serviceProps) => {
   const [account_id, page] = serviceProps;
+  // ?sort_by=created_at.desc
   const response = await fetch(
-    `${API_URL}/account/${account_id}/watchlist/movies?page=${page}&language=uk-UA`,
+    `${API_URL}/account/${account_id}/watchlist/movies?page=${page}&language=uk-UA&sort_by=primary_release_date.desc`,
     createFetchOptions()
   );
   const data = await response.json();
@@ -176,6 +179,19 @@ export const toggleToWatchlist = async ({ account_id, reqOptions }) => {
   return result;
 };
 
+export const getCollectionDetails = async (collection_id) => {
+  const response = await fetch(
+    `${API_URL}/collection/${collection_id}?language=${language}`,
+    createFetchOptions()
+  );
+  const result = await response.json();
+  if (!response.ok)
+    throw new Error(
+      `${result.status_message} Status code: ${result.status_code}`
+    );
+  return result;
+};
+
 // ###############################################
 
 // ###############################################
@@ -223,18 +239,6 @@ export default class ApiService {
       reqOptions
     );
     const result = await response.json();
-    return result;
-  };
-
-  getCollectionDetails = async (collection_id) => {
-    const response = await fetch(
-      `${API_URL}/collection/${collection_id}?api_key=${API_KEY_3}`
-    );
-    const result = await response.json();
-    if (!response.ok)
-      throw new Error(
-        `${result.status_message} Status code: ${result.status_code}`
-      );
     return result;
   };
 }

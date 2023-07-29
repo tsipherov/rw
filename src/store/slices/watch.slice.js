@@ -26,12 +26,6 @@ const watchSlice = createSlice({
     error: null,
     total_pages: 0,
   }),
-
-  // {
-  //   loading: "idle",
-  //   entities: {},
-  //   error: null,
-  // },
   reducers: {},
   extraReducers: (builder) => {
     builder
