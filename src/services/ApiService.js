@@ -23,6 +23,18 @@ const createFetchOptions = ({ bodyData = null, httpMethod = "GET" } = {}) => {
   return requestOptions;
 };
 
+const transformVideoData = (videoLinks) => {
+  if (!videoLinks.results.length) return null;
+  // console.log("SingleMoviePage responseVideo >>> ", videoLinks);
+  const trailers = videoLinks.results.filter(
+    (link) => link.site === "YouTube" && link.type === "Trailer"
+  );
+  const youtubeCode = trailers.length
+    ? trailers[0].key
+    : videoLinks.results[0].key;
+  return youtubeCode;
+};
+
 export const getAuthToken = async () => {
   const response = await fetch(
     `${API_URL}/authentication/token/new`,
@@ -107,6 +119,63 @@ export const getFavoriteMovies = async ({ serviceProps }) => {
   return result;
 };
 
+export const getMovieDetails = async (movie_id) => {
+  const response = await fetch(
+    `${API_URL}/movie/${movie_id}?language=uk-UA`,
+    createFetchOptions()
+  );
+  const result = await response.json();
+  if (!response.ok)
+    throw new Error(
+      `${result.status_message} Status code: ${result.status_code}`
+    );
+  return result;
+};
+
+export const movieAccountStates = async (movie_id) => {
+  const response = await fetch(
+    `${API_URL}/movie/${movie_id}/account_states`,
+    createFetchOptions()
+  );
+  const result = await response.json();
+  if (!response.ok)
+    throw new Error(
+      `${result.status_message} Status code: ${result.status_code}`
+    );
+  return result;
+};
+
+export const getVideo = async (movie_id) => {
+  const response = await fetch(
+    `${API_URL}/movie/${movie_id}/videos`,
+    createFetchOptions()
+  );
+  const result = await response.json();
+  if (!response.ok)
+    throw new Error(
+      `${result.status_message} Status code: ${result.status_code}`
+    );
+  return transformVideoData(result);
+};
+
+export const toggleFavorite = async ({ account_id, reqOptions }) => {
+  const response = await fetch(
+    `${API_URL}/account/${account_id}/favorite`,
+    createFetchOptions(reqOptions)
+  );
+  const result = await response.json();
+  return result;
+};
+
+export const toggleToWatchlist = async ({ account_id, reqOptions }) => {
+  const response = await fetch(
+    `${API_URL}/account/${account_id}/watchlist`,
+    createFetchOptions(reqOptions)
+  );
+  const result = await response.json();
+  return result;
+};
+
 // ###############################################
 
 // ###############################################
@@ -147,59 +216,7 @@ export default class ApiService {
     }
   };
 
-  getMovieDetails = async ({ serviceProps, reqOptions }) => {
-    const [movie_id] = serviceProps;
-    const response = await fetch(
-      `${API_URL}/movie/${movie_id}?language=uk-UA`,
-      reqOptions
-    );
-    const result = await response.json();
-    if (!response.ok)
-      throw new Error(
-        `${result.status_message} Status code: ${result.status_code}`
-      );
-    return result;
-  };
-
-  addFavorite = async ({ serviceProps, reqOptions }) => {
-    console.log("addFavorite method serviceProps >>>> ", serviceProps);
-    console.log("addFavorite method reqOptions >>>> ", reqOptions);
-    const [account_id] = serviceProps;
-    const response = await fetch(
-      `${API_URL}/account/${account_id}/favorite`,
-      reqOptions
-    );
-    const result = await response.json();
-    return result;
-  };
-
-  addToWatchlist = async ({ serviceProps, reqOptions }) => {
-    console.log("addFavorite method serviceProps >>>> ", serviceProps);
-    console.log("addFavorite method reqOptions >>>> ", reqOptions);
-    const [account_id] = serviceProps;
-    const response = await fetch(
-      `${API_URL}/account/${account_id}/watchlist`,
-      reqOptions
-    );
-    const result = await response.json();
-    return result;
-  };
-
-  movieAccountStates = async ({ serviceProps, reqOptions }) => {
-    // console.log("addFavorite method serviceProps >>>> ", serviceProps);
-    // console.log("addFavorite method reqOptions >>>> ", reqOptions);
-    const [movie_id] = serviceProps;
-    const response = await fetch(
-      `${API_URL}/movie/${movie_id}/account_states`,
-      reqOptions
-    );
-    const result = await response.json();
-    return result;
-  };
-
   searchMovie = async ({ serviceProps, reqOptions }) => {
-    // console.log("addFavorite method serviceProps >>>> ", serviceProps);
-    // console.log("addFavorite method reqOptions >>>> ", reqOptions);
     const [searchQuery, page] = serviceProps;
     const response = await fetch(
       `${API_URL}/search/movie${searchQuery}&page=${page}&language=uk-UA`,
@@ -209,25 +226,7 @@ export default class ApiService {
     return result;
   };
 
-  getVideo = async ({ serviceProps, reqOptions }) => {
-    // console.log("addFavorite method serviceProps >>>> ", serviceProps);
-    // console.log("addFavorite method reqOptions >>>> ", reqOptions);
-    const [movie_id] = serviceProps;
-    const response = await fetch(
-      `${API_URL}/movie/${movie_id}/videos`,
-      reqOptions
-    );
-    const result = await response.json();
-    if (!response.ok)
-      throw new Error(
-        `${result.status_message} Status code: ${result.status_code}`
-      );
-    return result;
-  };
-
   getCollectionDetails = async (collection_id) => {
-    // console.log("addFavorite method serviceProps >>>> ", serviceProps);
-
     const response = await fetch(
       `${API_URL}/collection/${collection_id}?api_key=${API_KEY_3}`
     );

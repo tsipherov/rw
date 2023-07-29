@@ -77,6 +77,10 @@ iframe {
     background-color: #7e7e7e;
 } */
 
+.singleMovieOriginalTitle {
+    color: var(--main-clr);
+}
+
 .singleMovieDescription {
     grid-area: description;
 }

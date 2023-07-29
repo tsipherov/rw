@@ -23,7 +23,7 @@ const App = () => {
 
   return (
     <UserProvider>
-      <BrowserRouter basename="rw">
+      <BrowserRouter basename="/rw">
         <Navbar />
         <Routes>
           <Route
@@ -35,10 +35,10 @@ const App = () => {
           />
           <Route path="/movies/:page" element={<HomePage />} />
           <Route path="/movie/:movie_id" element={<SingleMoviePage />} />
-          <Route path="login" element={<Auth />} />
-          <Route path="register" element={<Auth />} />
+          <Route path="/login" element={<Auth />} />
+          <Route path="/register" element={<Auth />} />
           <Route path="/favorites/:page?" element={<FavoritesPage />} />
-          <Route path="watch/:page?" element={<WatchPage />} />
+          <Route path="/watch/:page?" element={<WatchPage />} />
           <Route path="/search/:page?" element={<SearchPage />} />
         </Routes>
       </BrowserRouter>

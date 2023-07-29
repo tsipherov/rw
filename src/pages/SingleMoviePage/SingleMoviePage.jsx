@@ -1,104 +1,53 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import "./SingleMoviePage.css";
-import { useFetch } from "../../hooks/useFetch";
-import { UserContext } from "../../contexts/userContext";
 import ApiService from "../../services/apiService";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchSingleMovie,
+  fetchStateSingleMovie,
+  fetchTrailer,
+  setDefaultState,
+  toggleStateMovie,
+} from "../../store/slices/singleMovie.slice";
+import "./SingleMoviePage.css";
 
 const SingleMoviePage = () => {
-  const [movie, setMovie] = useState(null);
-  const [stateMovie, setStateMovie] = useState(null);
   const { movie_id } = useParams();
-  const [videoLink, setVideoLink] = useState(null);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const { movieLoading, movie, stateMovie, loading, videoLink } = useSelector(
+    (state) => state.singleMovie
+  );
 
   const apiService = new ApiService();
 
-  const [
-    { isLoading: stateIsLoading, response: stateResponse, error: stateError },
-    stateCreateFetchRequest,
-  ] = useFetch();
-  const [{ isLoading, response, error }, createFetchRequest] = useFetch();
-  const [
-    { isLoading: toggleLoad, response: toggleRes, error: toggleErr },
-    toggleRequest,
-  ] = useFetch();
-  const [
-    { isLoading: isLoadVideo, response: responseVideo, error: errVideo },
-    createFetchRequestVideo,
-  ] = useFetch();
-  const [user] = useContext(UserContext);
-
   useEffect(() => {
-    // console.log("SingleMoviePage stateResponse >>>> ", stateResponse);
-    // console.log("SingleMoviePage response >>>> ", response);
-    if (movie_id && !movie && !stateResponse && !stateIsLoading) {
-      createFetchRequest("getMovieDetails", [movie_id]);
-    }
-    if (!movie && response) {
-      stateCreateFetchRequest("movieAccountStates", [movie_id]);
-      createFetchRequestVideo("getVideo", [movie_id]);
-      setMovie(response);
-    }
-    if (stateResponse) {
-      setStateMovie(stateResponse);
-    }
-    if (responseVideo) {
-      getVideoLink(responseVideo);
-      // setVideo(responseVideo);
-    }
-  }, [
-    movie_id,
-    response,
-    stateResponse,
-    stateError,
-    stateIsLoading,
-    responseVideo,
-  ]);
+    console.log("Single Movie Page useEffect works!!!!");
+    // dispatch(setDefaultState());
+    dispatch(fetchSingleMovie(movie_id));
+    dispatch(fetchStateSingleMovie(movie_id));
+    dispatch(fetchTrailer(movie_id));
+  }, []);
 
-  useEffect(() => {
-    if (toggleLoad) stateCreateFetchRequest("movieAccountStates", [movie_id]);
-  }, [toggleRes, toggleLoad]);
+  // useEffect(() => {
+  //   console.log("Single Movie Page getVideo works!!!!");
+  // }, [stateMovie]);
 
-  const getVideoLink = (videoLinks) => {
-    if (!videoLinks.results.length) return null;
-    console.log("SingleMoviePage responseVideo >>> ", videoLinks);
-    const trailers = videoLinks.results.filter(
-      (link) => link.site === "YouTube" && link.type === "Trailer"
-    );
-    const youtubeCode = trailers.length
-      ? trailers[0].key
-      : videoLinks.results[0].key;
-    setVideoLink(youtubeCode);
-  };
-
-  const addToFavoriteHandler = () => {
-    toggleRequest(
-      "addFavorite",
-      [user.currentUser.id],
-      {
+  const toggleStateMovieHandler = (prop) => {
+    const reqOptions = {
+      bodyData: {
         media_type: "movie",
         media_id: movie_id,
-        favorite: !stateMovie.favorite,
+        [prop]: !stateMovie[prop],
       },
-      "POST"
-    );
-  };
-
-  const addToWatchHandler = () => {
-    toggleRequest(
-      "addToWatchlist",
-      [user.currentUser.id],
-      {
-        media_type: "movie",
-        media_id: movie_id,
-        watchlist: !stateMovie.watchlist,
-      },
-      "POST"
-    );
+      httpMethod: "POST",
+    };
+    const account_id = user.id;
+    dispatch(toggleStateMovie({ prop, account_id, movie_id, reqOptions }));
   };
 
   let content =
-    movie && stateMovie ? (
+    movieLoading === "succeeded" ? (
       <div className="container">
         <div className="singleMoviePage">
           <h2 className="singleMovieTitle">{movie.title}</h2>
@@ -110,27 +59,33 @@ const SingleMoviePage = () => {
             alt={movie.original_title}
           />
           <div className="singleMovieDetails">
-            <div className="singleMovieButtonsBlock">
-              {movie.adult ? <div className="adult">18+</div> : null}
+            {stateMovie ? (
+              <div className="singleMovieButtonsBlock">
+                {movie.adult ? <div className="adult">18+</div> : null}
 
-              <button
-                title="Add to favorite"
-                className={stateMovie.favorite ? "active" : null}
-                onClick={addToFavoriteHandler}
-                disabled={stateIsLoading && toggleLoad}
-              >
-                <i className="bi bi-heart" />
-              </button>
-              <button
-                title="Add to watch list"
-                className={stateMovie.watchlist ? "active" : null}
-                onClick={addToWatchHandler}
-                disabled={stateIsLoading && toggleLoad}
-              >
-                <i className="bi bi-bookmark-plus" />
-              </button>
-            </div>
-            <h3>{movie.original_title}</h3>
+                <button
+                  title="Add to favorite"
+                  className={stateMovie.favorite ? "active" : null}
+                  onClick={() => {
+                    toggleStateMovieHandler("favorite");
+                  }}
+                  disabled={loading === "pending"}
+                >
+                  <i className="bi bi-heart" />
+                </button>
+                <button
+                  title="Add to watch list"
+                  className={stateMovie.watchlist ? "active" : null}
+                  onClick={() => {
+                    toggleStateMovieHandler("watchlist");
+                  }}
+                  disabled={loading === "pending"}
+                >
+                  <i className="bi bi-bookmark-plus" />
+                </button>
+              </div>
+            ) : null}
+            <h3 className="singleMovieOriginalTitle">{movie.original_title}</h3>
             <h4>{movie.tagline}</h4>
             <ul>
               <li key="production_companies_logo">
@@ -223,8 +178,8 @@ const SingleMoviePage = () => {
               height="607"
               src={`https://www.youtube.com/embed/${videoLink}`}
               title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              // frameborder="5"
+              // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             ></iframe>
           ) : null}
